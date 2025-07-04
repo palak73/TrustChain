@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TrustChain</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="home"></div>
+<header>
+  <nav class="navbar">
+    <ul class="navbar-list">
+      <li class="navbar-brand">TrustChain</li>
+      <li><a href="#home">Home</a></li>
+      <li><a href="#ngos">NGOs</a></li>
+      <li><a href="#donor">Donor</a></li>
+      <li><a href="#dashboard">NGO Dashboard</a></li>
+      <li><a href="#admin">Admin</a></li>
+    </ul>
+  </nav>
+</header>
+
+
+  <!-- SWIPE BACKGROUND HERO SECTION -->
+<div class="slider-container">
+  <div class="slide-bg" id="bg1"></div>
+  <div class="slide-bg" id="bg2"></div>
+  <!-- HERO SECTION TEXT -->
+<section class="hero-center-text">
+  <h1 class="hero-heading">Welcome to TrustChain</h1>
+  <p class="hero-quote">"Transparency is the foundation of trust — let's build it together."</p>
+</section>
+</div>
+<!-- NGOs Section -->
+<section id="ngos" class="section ngos-section"  style="height: 700px; overflow-y: auto;>
+<div class="container">
+    <div class="section-title">
+      <h2 class="text-center">Our Partner NGOs</h2>
+      <p class="text-center">Transparent and verified organizations you can trust</p>
+    </div>
+
+    <input type="text" id="ngoSearch" placeholder="Search NGOs by name or category..." class="ngo-search-bar">
+
+    <div class="row" id="ngoCards">
+      <!-- NGO Cards dynamically insert -->
+    </div>
+  </div>
+</section>
+
+<!-- Donate Modal -->
+<div id="donateModal" class="modal">
+  <div class="modal-content">
+    <span class="close-button">&times;</span>
+    <h2>Donate to <span id="modalNgoName"></span></h2>
+    <p>Enter the amount and confirm your donation.</p>
+    <input type="number" id="donationAmount" placeholder="Amount in ₹">
+    <button id="confirmDonate">Confirm Donation</button>
+  </div>
+</div>
+
+  <script src="js\script.js"></script>
+
+
+</body>
+</html>

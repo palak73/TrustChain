@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TrustChain - Donor Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <nav style="background:#333; padding:10px;">
+      <a href="index1.html" style="color:white; margin:10px;">Home</a>
+      <a href="#" style="color:white; margin:10px;">Dashboard</a>
+    </nav>
+  </header>
+
+  <div class="layout layout1">
+    <h1>Your Donation History</h1>
+    <div id="donationHistory" class="dashboard-table"></div>
+  </div>
+
+  <footer style="background:#333; color:white; padding:10px; position:fixed; width:100%; bottom:0;">
+    <p>&copy; 2025 TrustChain. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const donations = [
+      { ngo: "Smile Foundation", amount: 500, date: "2025-06-10" },
+      { ngo: "HealthAid", amount: 750, date: "2025-06-11" },
+      { ngo: "Green Earth", amount: 1000, date: "2025-06-13" }
+    ];
+
+    const container = document.getElementById("donationHistory");
+    let table = "<table border='1' style='width:80%;margin:auto;background:#fff;'><tr><th>NGO</th><th>Amount (₹)</th><th>Date</th></tr>";
+    donations.forEach(d => {
+      table += `<tr><td>${d.ngo}</td><td>${d.amount}</td><td>${d.date}</td></tr>`;
+    });
+    table += "</table>";
+    container.innerHTML = table;
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+[
+  {
+    "name": "Smile Foundation",
+    "category": "Education",
+    "goal": 100000,
+    "location": "Delhi",
+    "verified": true,
+    "website": "https://www.smilefoundationindia.org"
+  },
+  {
+    "name": "Goonj",
+    "category": "Disaster Relief",
+    "goal": 150000,
+    "location": "Delhi",
+    "verified": true,
+    "website": "https://goonj.org"
+  },
+  {
+    "name": "Akshaya Patra Foundation",
+    "category": "Hunger",
+    "goal": 200000,
+    "location": "Bangalore",
+    "verified": true,
+    "website": "https://www.akshayapatra.org"
+  },
+  {
+    "name": "HelpAge India",
+    "category": "Elderly Care",
+    "goal": 120000,
+    "location": "Delhi",
+    "verified": true,
+    "website": "https://www.helpageindia.org"
+  },
+  {
+    "name": "Teach For India",
+    "category": "Education",
+    "goal": 180000,
+    "location": "Mumbai",
+    "verified": true,
+    "website": "https://www.teachforindia.org"
+  },
+  {
+    "name": "Pratham Education Foundation",
+    "category": "Education",
+    "goal": 130000,
+    "location": "Mumbai",
+    "verified": true,
+    "website": "https://www.pratham.org"
+  },
+  {
+    "name": "Make A Difference (MAD)",
+    "category": "Child Welfare",
+    "goal": 90000,
+    "location": "Kochi",
+    "verified": true,
+    "website": "https://makeadiff.in"
+  },
+  {
+    "name": "CRY \u2013 Child Rights and You",
+    "category": "Child Welfare",
+    "goal": 160000,
+    "location": "Mumbai",
+    "verified": true,
+    "website": "https://www.cry.org"
+  },
+  {
+    "name": "Save The Children India",
+    "category": "Child Welfare",
+    "goal": 175000,
+    "location": "Gurgaon",
+    "verified": true,
+    "website": "https://www.savethechildren.in"
+  },
+  {
+    "name": "Sankara Eye Foundation",
+    "category": "Health",
+    "goal": 140000,
+    "location": "Coimbatore",
+    "verified": true,
+    "website": "https://www.sankaraeye.com"
+  }
+]
