@@ -341,5 +341,13 @@
   height: 0;
 }
 
+footer{
+  height: 35px;
+  text-align: center;
+  background-color: #218838;
+  border-radius: 5px;
+}
+
+
 
 
