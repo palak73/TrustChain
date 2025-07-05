@@ -17,14 +17,17 @@
   <div id="home"></div>
 <header>
   <nav class="navbar">
-    <ul class="navbar-list">
-      <li class="navbar-brand">TrustChain</li>
-      <li><a href="#home">Home</a></li>
-      <li><a href="#ngos">NGOs</a></li>
-      <li><a href="#donor">Donor</a></li>
-      <li><a href="#dashboard">NGO Dashboard</a></li>
-      <li><a href="#admin">Admin</a></li>
-    </ul>
+    <div class="navbar-list">
+  <div class="navbar-brand">TrustChain</div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#ngos">NGOs</a></li>
+    <li><a href="#donor">Donor</a></li>
+    <li><a href="#dashboard">NGO Dashboard</a></li>
+    <li><a href="#admin">Admin</a></li>
+  </ul>
+</div>
+
   </nav>
 </header>
 
@@ -66,12 +69,32 @@
   </div>
 </div>
 
+<section id="donor">
+  <div class="container">
+    <h2 class="donor-heading">Donor Portal</h2>
+
+    <div id="auth-section">
+      <input type="email" id="email" placeholder="Email">
+      <input type="password" id="password" placeholder="Password">
+      <button id="login">Login</button>
+      <button id="register">Register</button>
+    </div>
+    <div id="dashboard" class="hidden">
+      <h2>Welcome, <span id="user-email"></span></h2>
+      <button id="logout">Logout</button>
+
+      <h3>Your Donation History</h3>
+      <ul id="donation-list"></ul>
+    </div>
+  </div>
+</section>
+
 <footer>
   2025 &copy; Trust Chain. All Rights Reserved.
 </footer>
 
   <script src="js\script.js"></script>
-
+  <script src="donor.js"></script>
 
 </body>
 </html>
