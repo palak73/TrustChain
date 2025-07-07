@@ -195,3 +195,31 @@ toggle.addEventListener("change", function () {
   // Save user preference
   localStorage.setItem("dark-mode", this.checked);
 });
+
+
+function submitDonation() {
+  const name = document.getElementById("donorName").value.trim();
+  const email = document.getElementById("donorEmail").value.trim();
+  const ngo = document.getElementById("donorNGO").value.trim();
+  const amount = document.getElementById("donorAmount").value.trim();
+
+  if (!name || !email || !ngo || !amount || isNaN(amount) || parseInt(amount) <= 0) {
+    alert("Please fill all fields with valid data.");
+    return;
+  }
+
+  const donationRecord = `${name} donated ₹${amount} to ${ngo}`;
+
+  const li = document.createElement("li");
+  li.textContent = donationRecord;
+  document.getElementById("donationList").appendChild(li);
+
+  alert("🎉 Thank you for your donation!");
+  
+  // Optional: Clear fields
+  document.getElementById("donorName").value = "";
+  document.getElementById("donorEmail").value = "";
+  document.getElementById("donorNGO").value = "";
+  document.getElementById("donorAmount").value = "";
+}
+
