@@ -82,7 +82,7 @@ let allNGOs = [];
 let selectedNGO = null;
 
 // ✅ Fetch NGO Data from npoint.io JSON API
-fetch("https://api.npoint.io/1b9476c90b214a9d9bc8") 
+fetch("https://api.npoint.io/1b9476c90b214a9d9bc8")
   .then(res => res.json())
   .then(data => {
     allNGOs = data;
@@ -101,11 +101,23 @@ const modalNgoName = document.getElementById("modalNgoName");
 const donationAmount = document.getElementById("donationAmount");
 const confirmDonateBtn = document.getElementById("confirmDonate");
 const closeModalBtn = document.querySelector(".close-button");
+const select = document.getElementById("mySelect");
+const close = document.getElementById("close");
+
+export let Contractindex = 0; // Initialize
+window.getContractIndex = 0;
+
 
 // ✅ Render NGO Cards
 function renderNGOCards(data) {
   ngoContainer.innerHTML = "";
   data.forEach((ngo, index) => {
+
+    const newOption = document.createElement('option');
+    newOption.value = `${index}`;
+    newOption.text = `${ngo.name}`;
+    select.appendChild(newOption);
+
     const card = document.createElement("div");
     card.classList.add("ngo-col");
 
@@ -138,6 +150,7 @@ function filterNGOs() {
 
 // ✅ Donation Modal
 function openDonateModal(index) {
+  window.Contractindex = index;
   selectedNGO = allNGOs[index];
   modalNgoName.textContent = selectedNGO.name;
   donationAmount.value = "";
@@ -147,12 +160,16 @@ function openDonateModal(index) {
 function closeModal() {
   modal.style.display = "none";
 }
+close.addEventListener("click",()=>{
+  closeModal();
+});
 
 function confirmDonation() {
   const amount = donationAmount.value;
-  if (amount && parseInt(amount) > 0) {
-    alert(`Thank you! You donated ₹${amount} to ${selectedNGO.name}`);
-    closeModal();
+  if (amount > 0) {
+    alert(`Thank you! You donated ${amount}ETH to ${selectedNGO.name}`);
+
+    // closeModal();
   } else {
     alert("Please enter a valid donation amount.");
   }
@@ -170,7 +187,7 @@ window.addEventListener("click", (e) => {
 
 
 // // ✅ Expose modal function globally
- window.openDonateModal = openDonateModal;
+window.openDonateModal = openDonateModal;
 
 
 
@@ -215,7 +232,7 @@ function submitDonation() {
   document.getElementById("donationList").appendChild(li);
 
   alert("🎉 Thank you for your donation!");
-  
+
   // Optional: Clear fields
   document.getElementById("donorName").value = "";
   document.getElementById("donorEmail").value = "";
