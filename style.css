@@ -268,32 +268,49 @@
 
 
 /* MODAL STYLES */
+
 .modal {
   display: none;
   position: fixed;
-  top: 0;
+  z-index: 999;
   left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: 2000;
-  justify-content: center;
-  align-items: center;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
-  background-color: #fff;
+  margin: 10% auto;
+}
+
+
+.modal-content {
+  width: 800px; 
+  max-width: 90%;
   padding: 30px;
-  border-radius: 10px;
-  max-width: 400px;
-  width: 90%;
+  border-radius: 15px;
+  background-color: #fff;
+  box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.8);
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 768px) {
+  .modal-content {
+    width: 750px; 
+    height: 480px;
+}
+}
+
+.modal-content {
   text-align: center;
 }
 
 .modal-content input {
   width: 100%;
   padding: 12px;
-  margin: 15px 0;
+  margin: 15px 0px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }

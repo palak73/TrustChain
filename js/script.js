@@ -65,7 +65,7 @@ setInterval(swapImages, 5000);
 
 
 
-// ✅ Firebase Config & Initialization
+//  Firebase Config & Initialization
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
@@ -77,11 +77,11 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// ✅ Global Variables
+// Global Variables
 let allNGOs = [];
 let selectedNGO = null;
 
-// ✅ Fetch NGO Data from npoint.io JSON API
+//  Fetch NGO Data from npoint.io JSON API
 fetch("https://api.npoint.io/1b9476c90b214a9d9bc8")
   .then(res => res.json())
   .then(data => {
@@ -93,7 +93,7 @@ fetch("https://api.npoint.io/1b9476c90b214a9d9bc8")
     console.error("Failed to load NGOs:", err);
   });
 
-// ✅ DOM References
+// DOM References
 const ngoContainer = document.getElementById("ngoCards");
 const searchInput = document.getElementById("ngoSearch");
 const modal = document.getElementById("donateModal");
@@ -108,7 +108,7 @@ export let Contractindex = 0; // Initialize
 window.getContractIndex = 0;
 
 
-// ✅ Render NGO Cards
+// Render NGO Cards
 function renderNGOCards(data) {
   ngoContainer.innerHTML = "";
   data.forEach((ngo, index) => {
@@ -137,7 +137,7 @@ function renderNGOCards(data) {
   });
 }
 
-// ✅ Search Functionality
+//  Search Functionality
 function filterNGOs() {
   const query = searchInput.value.toLowerCase();
   const filtered = allNGOs.filter((ngo) =>
@@ -148,7 +148,7 @@ function filterNGOs() {
   renderNGOCards(filtered);
 }
 
-// ✅ Donation Modal
+//  Donation Modal
 function openDonateModal(index) {
   window.Contractindex = index;
   selectedNGO = allNGOs[index];
@@ -175,7 +175,7 @@ function confirmDonation() {
   }
 }
 
-// ✅ Event Listeners
+// Event Listeners
 searchInput.addEventListener("input", filterNGOs);
 closeModalBtn.addEventListener("click", closeModal);
 confirmDonateBtn.addEventListener("click", confirmDonation);
@@ -186,7 +186,7 @@ window.addEventListener("click", (e) => {
 });
 
 
-// // ✅ Expose modal function globally
+// // Expose modal function globally
 window.openDonateModal = openDonateModal;
 
 
