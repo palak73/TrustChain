@@ -164,14 +164,25 @@ close.addEventListener("click",()=>{
   closeModal();
 });
 
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  const toastText = document.getElementById("toast-text");
+  toastText.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
 function confirmDonation() {
   const amount = donationAmount.value;
-  if (amount > 0) {
-    alert(`Thank you! You donated ${amount}ETH to ${selectedNGO.name}`);
-
-    // closeModal();
+  if (amount && parseFloat(amount) > 0) {
+    showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+    closeModal();
   } else {
-    alert("Please enter a valid donation amount.");
+    showToast("⚠️ Please enter a valid donation amount.");
   }
 }
 
