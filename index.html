@@ -70,14 +70,25 @@
       <span class="close-button">&times;</span>
       <h2>Donate to <span id="modalNgoName"></span></h2>
       <p>Enter the amount and confirm your donation.</p>
-      <input type="number" id="donationAmount" placeholder="Amount in ₹">
+      <div class="input-button-wrapper">
+        <input type="number" id="donationAmount" placeholder="Amount in ETH">
+        <button id="check">Check </button>
+      </div>
+      <div id="conversion"></div>
       <div id="loading" role="alert"></div>
       <button id="confirmDonate">Confirm Donation</button>
       <button id="close">Close</button>
-      
+
     </div>
-    
+
   </div>
+  
+  <!-- loading-screen -->
+  <div id="loading-screen" style="display: none;">
+    <div class="spinner"></div>
+    <p>Processing transaction, please wait...</p>
+  </div>
+
 
 
   <!-- DONOR SECTION -->
@@ -115,8 +126,8 @@
   <script src="donor.js"></script>
 
   <div id="toast" class="toast-message">
-  <span id="toast-text"></span>
-</div>
+    <span id="toast-text"></span>
+  </div>
 
 </body>
 

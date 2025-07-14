@@ -129,7 +129,7 @@ function renderNGOCards(data) {
         <p><strong>Goal:</strong> ₹${ngo.goal.toLocaleString()}</p>
         <a href="${ngo.website || "#"}" target="_blank">Website</a>
         ${ngo.verified ? '<p style="color:green;">✅ Verified</p>' : ""}
-        <button class="btn" onclick="openDonateModal(${index})">Donate Now</button>
+        <button id="donatenowbtn" class="btn" onclick="openDonateModal(${index})">Donate Now</button>
       </div>
     `;
 
@@ -154,6 +154,7 @@ function openDonateModal(index) {
   selectedNGO = allNGOs[index];
   modalNgoName.textContent = selectedNGO.name;
   donationAmount.value = "";
+
   modal.style.display = "block";
 }
 
@@ -189,7 +190,7 @@ function confirmDonation() {
 // Event Listeners
 searchInput.addEventListener("input", filterNGOs);
 closeModalBtn.addEventListener("click", closeModal);
-confirmDonateBtn.addEventListener("click", confirmDonation);
+// confirmDonateBtn.addEventListener("click", confirmDonation);
 window.addEventListener("click", (e) => {
   if (e.target === modal) {
     closeModal();

@@ -4,13 +4,25 @@ import { abi, contractaddress } from "./constant.js";
 
 // console.log(Contractindex);
 
-
 const connectbtn = document.querySelector("#connectWallet");
 const EthSend = document.getElementById("confirmDonate");
 const donateamt = document.getElementById("donationAmount");
 const load = document.getElementById("loading");
+const check = document.getElementById("check");
+const conv = document.getElementById("conversion");
+const loadingScreen = document.getElementById("loading-screen");
 
+let currRate;
 let provider, signer;
+
+
+const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=inr");
+const data = await res.json();
+currRate = data.ethereum.inr;
+console.log(`1 ETH = ₹${data.ethereum.inr}`);
+conv.innerHTML = `1 ETH = ₹${data.ethereum.inr}`;
+
+
 
 
 function getCurrentContract() {
@@ -35,7 +47,7 @@ connectbtn.addEventListener('click', async () => {
         await provider.send("eth_requestAccounts", []);
     }
     catch (error) {
-        if (error.code == 4001){
+        if (error.code == 4001) {
             alert("User Denied access");
             console.error("User Denied access");
         }
@@ -48,27 +60,47 @@ connectbtn.addEventListener('click', async () => {
 
 });
 
-
 // console.log("Current index:", window.getContractIndex());
+check.addEventListener('click', () => {
+
+    const total = currRate * donateamt.value;
+    conv.innerText = `${donateamt.value} ETH = ₹${total}`;
+
+});
 
 
 EthSend.addEventListener('click', async () => {
-    const contract = getCurrentContract();
-    const dntamt = donateamt.value;
-    //  console.log(typeof dntamt);
-    // Gets fresh index every time
+    loadingScreen.style.display = "flex";
+    try {
+        const contract = getCurrentContract();
+        const dntamt = donateamt.value;
+        //  console.log(typeof dntamt);
+        // Gets fresh index every time
 
-    console.log("Current index at tx time:", window.Contractindex);
-    console.log("Using address:", contractaddress[window.Contractindex]);
-    const convrt = await contract.getConversionrate(ethers.utils.parseEther(dntamt));
-    console.log(convrt);
-    console.log(ethers.utils.formatUnits(convrt, 18));
-    const tx = await contract.Fund({ value: ethers.utils.parseEther(dntamt.toString()) });
-    load.textContent=`Awaiting Transaction Results... Please wait...`;
-    await tx.wait();
-    load.textContent=`Transaction Successful`;
+        console.log("Current index at tx time:", window.Contractindex);
+        console.log("Using address:", contractaddress[window.Contractindex]);
 
-    const rate=await contract.getPrice();
+        const convrt = await contract.getConversionrate(ethers.utils.parseEther(dntamt));
+        console.log(convrt);
+        console.log(ethers.utils.formatUnits(convrt, 18));
+
+        const tx = await contract.Fund({ value: ethers.utils.parseEther(dntamt.toString()) });
+        // load.innerHTML = `Awaiting Transaction Results... Please wait...`;
+
+
+        await tx.wait();
+        loadingScreen.style.display = "none";
+
+        load.innerHTML = `Transaction Successful ${tx.hash}`;
+
+    }
+    catch (err) {
+        load.innerHTML = `Transaction Failed`;
+        alert("Transaction failed");
+    }
+
+    loadingScreen.style.display = "none";
+    const rate = await contract.getPrice();
     console.log(rate);
     console.log(ethers.utils.formatUnits(rate, 18));
 
