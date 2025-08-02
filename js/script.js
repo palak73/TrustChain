@@ -1,28 +1,4 @@
 
-// document.addEventListener("DOMContentLoaded", () => {
-//   const ngos = [
-//     { name: "Smile Foundation", category: "Education", goal: 100000 },
-//     { name: "HealthAid", category: "Health", goal: 200000 },
-//     { name: "Green Earth", category: "Environment", goal: 150000 },
-//     { name: "Future Coders", category: "Tech Education", goal: 120000 }
-//   ];
-
-//   const cards = ngos.map(n =>
-//     `<div class='ngo-card'>
-//       <h2>${n.name}</h2>
-//       <p>Focus: ${n.category}</p>
-//       <p>Goal: ₹${n.goal.toLocaleString()}</p>
-//       <button onclick="alert('Donate via MetaMask to ${n.name}')">Donate</button>
-//     </div>`
-//   ).join("");
-
-//   const target = document.getElementById("ngoCards");
-//   if (target) target.innerHTML = cards;
-// });
-
-
-
-
 const images = [
   'img/ngo1.jpg',
   'img/ngo2.jpg',
@@ -66,16 +42,16 @@ setInterval(swapImages, 5000);
 
 
 //  Firebase Config & Initialization
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+// const firebaseConfig = {
+//   apiKey: "YOUR_API_KEY",
+//   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+//   projectId: "YOUR_PROJECT_ID",
+//   storageBucket: "YOUR_PROJECT_ID.appspot.com",
+//   messagingSenderId: "YOUR_SENDER_ID",
+//   appId: "YOUR_APP_ID"
+// };
+// firebase.initializeApp(firebaseConfig);
+// const db = firebase.firestore();
 
 // Global Variables
 let allNGOs = [];
@@ -199,31 +175,8 @@ window.addEventListener("click", (e) => {
 
 
 // // Expose modal function globally
-window.openDonateModal = openDonateModal;
+ window.openDonateModal = openDonateModal;
 
-
-
-// dark mode
-
-const toggle = document.getElementById("modeToggle");
-const themeIcon = document.getElementById("themeIcon");
-
-// Load saved mode
-if (localStorage.getItem("dark-mode") === "true") {
-  document.body.classList.add("dark-mode");
-  toggle.checked = true;
-  themeIcon.textContent = "🌙";
-}
-
-toggle.addEventListener("change", function () {
-  document.body.classList.toggle("dark-mode");
-
-  // Change icon
-  themeIcon.textContent = this.checked ? "🌙" : "🌞";
-
-  // Save user preference
-  localStorage.setItem("dark-mode", this.checked);
-});
 
 
 function submitDonation() {
@@ -243,7 +196,7 @@ function submitDonation() {
   li.textContent = donationRecord;
   document.getElementById("donationList").appendChild(li);
 
-  alert("🎉 Thank you for your donation!");
+ showToast("🎉 Thank you for your donation!");
 
   // Optional: Clear fields
   document.getElementById("donorName").value = "";
@@ -251,4 +204,62 @@ function submitDonation() {
   document.getElementById("donorNGO").value = "";
   document.getElementById("donorAmount").value = "";
 }
+
+
+
+
+
+
+
+
+
+window.toggleAuth = function(show = true) {
+  const authModal = document.getElementById("authModal");
+  if (authModal) {
+    if (show) {
+      authModal.classList.remove("hidden");
+      authModal.style.display = "flex";  // Centering
+    } else {
+      authModal.classList.add("hidden");
+      authModal.style.display = "none";
+    }
+  }
+};
+
+
+
+function switchForm(type) {
+  const loginForm = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
+
+  if (type === "register") {
+    loginForm.classList.add("hidden");
+    registerForm.classList.remove("hidden");
+  } else {
+    loginForm.classList.remove("hidden");
+    registerForm.classList.add("hidden");
+  }
+}
+
+window.switchForm = switchForm;
+
+window.addEventListener("click", (e) => {
+  const authModal = document.getElementById("authModal");
+  if (e.target === authModal) toggleAuth(false);
+});
+
+
+
+
+window.addEventListener("scroll", () => {
+  const navbar = document.querySelector(".navbar");
+  if (window.scrollY > 30) {
+    navbar.classList.add("scrolled");
+  } else {
+    navbar.classList.remove("scrolled");
+  }
+});
+
+
+
 

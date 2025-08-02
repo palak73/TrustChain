@@ -8,9 +8,7 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Firebase SDKs -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
 
   <link
     href="https://fonts.googleapis.com/css2?family=Edu+AU+VIC+WA+NT+Pre:wght@400..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
@@ -19,24 +17,24 @@
 
 <body bgcolor="CFFFE2">
   <div id="home"></div>
-  <header>
-    <nav class="navbar" bgcolor="black">
-      <div class="navbar-list">
-        <div class="navbar-brand">TrustChain</div>
-        <ul class="nav-links">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#ngos">NGOs</a></li>
-          <li><a href="#donor">Donor</a></li>
-          <li><a href="#dashboard">NGO Dashboard</a></li>
-          <li><a href="#admin">Admin</a></li>
-          <li><button id="connectWallet" class="wallet-button">Connect Wallet</button></li>
-        </ul>
+ <header>
+  <nav class="navbar">
+    <div class="navbar-list">
+      <div class="navbar-brand">TrustChain</div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#ngos">NGOs</a></li>
+        <li><a href="#donor">Donor</a></li>
+        <li><a href="#dashboard">NGO Dashboard</a></li>
+        <li><a href="#admin">Admin</a></li>
+        <li><button onclick="toggleAuth(true)">Login / Register</button></li>
+        <li><button id="connectWallet" class="wallet-button">Connect Wallet</button></li>
+        <li id="userDisplay" class="user-info" style="color:white; font-weight:500;"></li>
 
-        </ul>
-      </div>
-
-    </nav>
-  </header>
+      </ul>
+    </div>
+  </nav>
+</header>
 
 
   <!-- SWIPE BACKGROUND HERO SECTION -->
@@ -123,12 +121,73 @@
 
   <script type="module" src="js\script.js"></script>
   <script type="module" src="js\ether.js"></script>
-  <script src="donor.js"></script>
+  <!-- <script src="donor.js"></script> -->
 
   <div id="toast" class="toast-message">
     <span id="toast-text"></span>
   </div>
 
+
+<!-- Login -->
+<!-- Auth Modal -->
+<div id="authModal" class="modal hidden">
+  <div class="auth-container">
+    <span class="close-button" onclick="toggleAuth(false)">&times;</span>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="auth-form">
+      <h3>Welcome Back</h3>
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPassword" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <p class="toggle-message">
+        Don't have an account?
+        <a href="#" onclick="switchForm('register')">Register</a>
+      </p>
+    </form>
+
+    <!-- Register Form -->
+    <form id="registerForm" class="auth-form hidden">
+      <h3>Create Account</h3>
+      <input type="text" id="registerName" placeholder="Full Name" required>
+      <input type="email" id="registerEmail" placeholder="Email" required>
+      <input type="password" id="registerPassword" placeholder="Password" required>
+
+      <!-- Role Selection -->
+      <div class="role-toggle">
+        <label class="role-option">
+          <input type="radio" name="role" value="donor" checked>
+          <span>🎁 Donor</span>
+        </label>
+        <label class="role-option">
+          <input type="radio" name="role" value="ngo-admin">
+          <span>🏢 Admin</span>
+        </label>
+      </div>
+
+      <button type="submit">Register</button>
+      <p class="toggle-message">
+        Already have an account?
+        <a href="#" onclick="switchForm('login')">Login</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+ <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+
+  <script type="module" src="js/script.js"></script>
+<script type="module" src="js/ether.js"></script>
+<script type="module" src="js/auth.js"></script>
+ 
 </body>
 
 </html>
