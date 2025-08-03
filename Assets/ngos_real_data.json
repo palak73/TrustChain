@@ -1,82 +1,723 @@
-[
+
+   [
   {
     "name": "Smile Foundation",
-    "category": "Education",
-    "goal": 100000,
-    "location": "Delhi",
     "verified": true,
-    "website": "https://www.smilefoundationindia.org"
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 22000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Medical Kit",
+        "Req": 12000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      }
+    ]
   },
   {
     "name": "Goonj",
-    "category": "Disaster Relief",
-    "goal": 150000,
-    "location": "Delhi",
-    "verified": true,
-    "website": "https://goonj.org"
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Transport",
+        "Req": 19000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": "Medical Kit",
+        "Req": 10000,
+        "Exp": 10000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
   },
   {
     "name": "Akshaya Patra Foundation",
-    "category": "Hunger",
-    "goal": 200000,
-    "location": "Bangalore",
     "verified": true,
-    "website": "https://www.akshayapatra.org"
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 25000,
+        "Exp": 25000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
   },
   {
     "name": "HelpAge India",
-    "category": "Elderly Care",
-    "goal": 120000,
-    "location": "Delhi",
     "verified": true,
-    "website": "https://www.helpageindia.org"
+    "milestones": [
+      {
+        "title": "Medical Kit",
+        "Req": 22000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 10000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
   },
   {
     "name": "Teach For India",
-    "category": "Education",
-    "goal": 180000,
-    "location": "Mumbai",
-    "verified": true,
-    "website": "https://www.teachforindia.org"
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 26000,
+        "Exp": 20000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": "Healthcare Camp",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
   },
   {
     "name": "Pratham Education Foundation",
-    "category": "Education",
-    "goal": 130000,
-    "location": "Mumbai",
     "verified": true,
-    "website": "https://www.pratham.org"
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 21000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Medical Kit",
+        "Req": 17000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 12000,
+        "Exp": 12000,
+        "Receipts_Uploaded": true
+      }
+    ]
   },
   {
     "name": "Make A Difference (MAD)",
-    "category": "Child Welfare",
-    "goal": 90000,
-    "location": "Kochi",
-    "verified": true,
-    "website": "https://makeadiff.in"
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Healthcare Camp",
+        "Req": 20000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
   },
   {
-    "name": "CRY \u2013 Child Rights and You",
-    "category": "Child Welfare",
-    "goal": 160000,
-    "location": "Mumbai",
+    "name": "CRY \u0096 Child Rights and You",
     "verified": true,
-    "website": "https://www.cry.org"
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 25000,
+        "Exp": 25000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Food Distribution",
+        "Req": 23000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
   },
   {
     "name": "Save The Children India",
-    "category": "Child Welfare",
-    "goal": 175000,
-    "location": "Gurgaon",
     "verified": true,
-    "website": "https://www.savethechildren.in"
+    "milestones": [
+      {
+        "title": "Medical Kit",
+        "Req": 13000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
   },
   {
     "name": "Sankara Eye Foundation",
-    "category": "Health",
-    "goal": 140000,
-    "location": "Coimbatore",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Healthcare Camp",
+        "Req": 20000,
+        "Exp": 20000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "The Bharat Scouts & Guides",
     "verified": true,
-    "website": "https://www.sankaraeye.com"
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 18000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 10000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "AROH Foundation",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Healthcare Camp",
+        "Req": 21000,
+        "Exp": 20000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "WOMEN AND CHILD CARE ORGANISATION",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Medical Kit",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Food Distribution",
+        "Req": 11000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 13000,
+        "Exp": 12000,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Sagar Trust",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 25000,
+        "Exp": 25000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "Sadik Masih Medical Social Servant Society",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 23000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Healthcare Camp",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Christian Social Welfare Trust (CSWT)",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Transport",
+        "Req": 14000,
+        "Exp": 10000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": "Medical Kit",
+        "Req": 10000,
+        "Exp": 10000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "Blue Birds Social Welfare Society",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 27000,
+        "Exp": 25000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 15000,
+        "Exp": 12000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Ganga Social Foundation",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Medical Kit",
+        "Req": 18000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": "Transport",
+        "Req": 10000,
+        "Exp": 10000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "Swadeshi Movement Foundation (SMF)",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Healthcare Camp",
+        "Req": 22000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Samanvit Shiksha Sansthan",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "AVN College of Management & Technology",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 20000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 13000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Novlok Welfare Society",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Medical Kit",
+        "Req": 22000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Noble Cause Social & Health Care Organization",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Healthcare Camp",
+        "Req": 30000,
+        "Exp": 25000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "Mother of Life Trust",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 22000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Medical Kit",
+        "Req": 12000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Samrasta Foundation",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Transport",
+        "Req": 15000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Healthcare Camp",
+        "Req": 13000,
+        "Exp": 10000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Saraswati Educational Society",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 20000,
+        "Exp": 20000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "Shiksha Seva Trust",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Food Distribution",
+        "Req": 27000,
+        "Exp": 25000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": "Transport",
+        "Req": 17000,
+        "Exp": 15000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Helping Hands Foundation",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Medical Kit",
+        "Req": 12000,
+        "Exp": 10000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": "Food Distribution",
+        "Req": 17000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
+  },
+  {
+    "name": "Saathi Foundation",
+    "verified": true,
+    "milestones": [
+      {
+        "title": "Healthcare Camp",
+        "Req": 21000,
+        "Exp": 20000,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": true
+      }
+    ]
+  },
+  {
+    "name": "Humanity Trust",
+    "verified": false,
+    "milestones": [
+      {
+        "title": "Education Support",
+        "Req": 18000,
+        "Exp": 15000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": "Transport",
+        "Req": 12000,
+        "Exp": 10000,
+        "Receipts_Uploaded": false
+      },
+      {
+        "title": NaN,
+        "Req": 0,
+        "Exp": 0,
+        "Receipts_Uploaded": false
+      }
+    ]
   }
 ]
