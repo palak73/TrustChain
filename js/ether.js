@@ -70,9 +70,20 @@ check.addEventListener('click', () => {
 
 
 EthSend.addEventListener('click', async () => {
+    let contract;
+    console.log(await window.ethereum.request({ method: 'eth_accounts' }).length);
+    if(await window.ethereum.request({ method: 'eth_accounts' }).length==0)
+    {
+        console.log("Wallet not connected");
+        alert("Wallet not connected");
+        return;
+    }
+    else {
     loadingScreen.style.display = "flex";
+
+
     try {
-        const contract = getCurrentContract();
+         contract = getCurrentContract();
         const dntamt = donateamt.value;
         //  console.log(typeof dntamt);
         // Gets fresh index every time
@@ -96,7 +107,7 @@ EthSend.addEventListener('click', async () => {
     }
     catch (err) {
         load.innerHTML = `Transaction Failed`;
-        alert("Transaction failed");
+        alert("Transaction failed... Wallet Not Connected");
     }
 
     loadingScreen.style.display = "none";
@@ -110,7 +121,6 @@ EthSend.addEventListener('click', async () => {
     // console.log(Contractindex);
     const balance = await provider.getBalance(contract.address);
     console.log(ethers.utils.formatEther(balance));
-
-
+}
 
 });

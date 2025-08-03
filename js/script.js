@@ -105,7 +105,7 @@ const select = document.getElementById("mySelect");
 const close = document.getElementById("close");
 
 export let Contractindex = 0; // Initialize
-window.getContractIndex = 0;
+
 
 
 // Render NGO Cards
