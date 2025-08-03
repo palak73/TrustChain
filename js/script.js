@@ -153,15 +153,57 @@ function showToast(message) {
   }, 3000);
 }
 
-function confirmDonation() {
-  const amount = donationAmount.value;
-  if (amount && parseFloat(amount) > 0) {
+// function confirmDonation() {
+  // const amount = donationAmount.value;
+  // if (amount && parseFloat(amount) > 0) {
+  //   showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+  //   closeModal();
+  // } else {
+  //   showToast("⚠️ Please enter a valid donation amount.");
+  // }
+
+  async function confirmDonation() {
+  const amount = parseFloat(donationAmount.value);
+  if (!amount || amount <= 0 || isNaN(amount)) {
+    showToast("⚠️ Please enter a valid donation amount.");
+    return;
+  }
+
+  const selectedMilestones = selectedNGO.milestones || [
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.95, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.98, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.20, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 }
+  ];
+
+  const payload = {
+    donation_amount: amount * 80000, // assuming 1 ETH = ₹80,000, adjust if needed
+    milestones: selectedMilestones
+  };
+
+  try {
+    const response = await fetch("https://ngotracking-2.onrender.com/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+    if (result.is_fraud === 1) {
+      alert("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Please verify before donating.");
+    } else {
+      alert("✅ Safe! No fraud detected for this NGO based on their milestone data.");
+    }
+
     showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
     closeModal();
-  } else {
-    showToast("⚠️ Please enter a valid donation amount.");
+
+  } catch (err) {
+    console.error("ML API error:", err);
+    alert("Failed to verify NGO data. Please try again later.");
   }
 }
+
+confirmDonateBtn.addEventListener("click", confirmDonation);
 
 // Event Listeners
 searchInput.addEventListener("input", filterNGOs);
