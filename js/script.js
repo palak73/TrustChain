@@ -124,6 +124,37 @@ function filterNGOs() {
   renderNGOCards(filtered);
 }
 
+
+
+
+function renderDonationCards(donations) {
+  const container = document.getElementById("donationCardsContainer");
+  container.innerHTML = "";
+
+  if (!donations.length) {
+    container.innerHTML = "<p>You haven't donated yet. Start supporting an NGO!</p>";
+    return;
+  }
+
+  donations.forEach((donation) => {
+    const card = document.createElement("div");
+    card.className = "donation-card";
+
+    card.innerHTML = `
+      <h4>${donation.ngoName}</h4>
+      <p class="donation-amount">₹${donation.amount}</p>
+      <p><strong>Date:</strong> ${donation.date || "N/A"}</p>
+      <p><strong>Method:</strong> ${donation.method || "Wallet"}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+
+
+
+
 //  Donation Modal
 function openDonateModal(index) {
   window.Contractindex = index;
@@ -153,15 +184,68 @@ function showToast(message) {
   }, 3000);
 }
 
-function confirmDonation() {
+
+
+async function confirmDonation() {
   const amount = donationAmount.value;
+  const user = firebase.auth().currentUser;
+
+  if (!user) {
+    showToast("⚠️ Please login to donate.");
+    return;
+  }
+
   if (amount && parseFloat(amount) > 0) {
-    showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
-    closeModal();
+    const donationData = {
+      userId: user.uid,
+      userName: user.displayName || "Anonymous",
+      ngoName: selectedNGO.name,
+      amount: parseFloat(amount),
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    try {
+      await db.collection("donations").add(donationData);
+      showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+      closeModal();
+      fetchAndRenderUserDonations(); // update list
+    } catch (error) {
+      console.error("Donation failed:", error);
+      showToast("❌ Donation could not be saved.");
+    }
   } else {
     showToast("⚠️ Please enter a valid donation amount.");
   }
 }
+
+async function fetchAndRenderUserDonations() {
+  const user = firebase.auth().currentUser;
+  if (!user) return;
+
+  const container = document.getElementById("donationCardsContainer");
+  container.innerHTML = "";
+
+  try {
+    const snapshot = await db.collection("donations")
+      .where("userId", "==", user.uid)
+      .orderBy("timestamp", "desc")
+      .get();
+
+    const donations = snapshot.docs.map(doc => ({
+      ...doc.data(),
+      date: doc.data().timestamp?.toDate().toLocaleDateString()
+    }));
+
+    renderDonationCards(donations);  // ✅ Now this works
+  } catch (err) {
+    console.error("Error fetching donations:", err);
+    container.innerHTML = "<p>⚠️ Failed to load donations.</p>";
+  }
+}
+
+
+
+
 
 // Event Listeners
 searchInput.addEventListener("input", filterNGOs);
@@ -260,6 +344,55 @@ window.addEventListener("scroll", () => {
   }
 });
 
+// Admin 
+
+async function fetchAllDonationsForAdmin() {
+  const container = document.getElementById("allDonationsContainer");
+  container.innerHTML = "";
+
+  try {
+    const snapshot = await db.collection("donations").orderBy("timestamp", "desc").get();
+
+    if (snapshot.empty) {
+      container.innerHTML = "<p>No donations yet.</p>";
+      return;
+    }
+
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      const date = d.timestamp?.toDate().toLocaleString() || "Unknown";
+
+      const card = document.createElement("div");
+      card.className = "admin-donation-card";
+
+      card.innerHTML = `
+        <p><strong>User:</strong> ${d.userName}</p>
+        <p><strong>NGO:</strong> ${d.ngoName}</p>
+        <p><strong>Amount:</strong> ₹${d.amount}</p>
+        <p><strong>Date:</strong> ${date}</p>
+      `;
+
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Error fetching all donations:", err);
+  }
+}
 
 
+window.showAdminPanel = function () {
+  const adminPanel = document.getElementById("adminPanel");
+  if (!adminPanel) return;
+
+  // Hide other sections
+  document.querySelectorAll("section").forEach((sec) => {
+    if (sec.id !== "adminPanel") sec.classList.add("hidden");
+  });
+
+  // Show admin panel
+  adminPanel.classList.remove("hidden");
+
+  // Fetch donation data
+  fetchAllDonationsForAdmin();
+};
 

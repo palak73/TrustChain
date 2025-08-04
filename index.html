@@ -26,7 +26,7 @@
         <li><a href="#ngos">NGOs</a></li>
         <li><a href="#donor">Donor</a></li>
         <li><a href="#dashboard">NGO Dashboard</a></li>
-        <li><a href="#admin">Admin</a></li>
+        <li><a href="#adminPanel" onclick="showAdminPanel()">Admin</a></li>
         <li><button onclick="toggleAuth(true)">Login / Register</button></li>
         <li><button id="connectWallet" class="wallet-button">Connect Wallet</button></li>
         <li id="userDisplay" class="user-info" style="color:white; font-weight:500;"></li>
@@ -108,11 +108,23 @@
 
     <div class="donation-history">
       <h3>Your Previous Donations</h3>
-      <ul id="donationList">
-        <!-- History dynamically added here -->
-      </ul>
+      <div id="donationCardsContainer" class="donation-cards-wrapper">
+    <!-- Donation cards will be dynamically inserted here -->
+  </div>
     </div>
   </section>
+
+
+<section id="adminPanel" class="admin-section hidden">
+  <h2 class="admin-title">🎯 Admin Dashboard</h2>
+
+  <div class="admin-subsection">
+    <h3>📦 All Donations</h3>
+    <div id="allDonationsContainer" class="admin-donation-grid"></div>
+  </div>
+</section>
+
+
 
 
   <footer>
@@ -184,9 +196,10 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
-  <script type="module" src="js/script.js"></script>
+ <script type="module" src="js/auth.js"></script> 
+<script type="module" src="js/script.js"></script>
 <script type="module" src="js/ether.js"></script>
-<script type="module" src="js/auth.js"></script>
+
  
 </body>
 

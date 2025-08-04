@@ -966,3 +966,129 @@ button {
 .hidden {
   display: none;
 }
+
+
+
+
+
+
+
+
+.donation-cards-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.donation-card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.donation-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.donation-card h4 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #2e2e2e;
+}
+
+.donation-card p {
+  margin: 4px 0;
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.donation-amount {
+  font-weight: bold;
+  color: #28a745;
+  font-size: 1rem;
+}
+
+.donation-card::before {
+  content: "🌟";
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 1.5rem;
+}
+
+
+/* Admin Section Styles */
+.admin-section {
+  padding: 60px 30px;
+  background: #f9fafb;
+  font-family: 'Poppins', sans-serif;
+  animation: fadeIn 0.8s ease;
+}
+
+.admin-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 40px;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.admin-subsection h3 {
+  font-size: 1.6rem;
+  color: #333;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #27ae60;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.admin-donation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.admin-donation-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: slideUp 0.6s ease;
+  position: relative;
+  border-left: 6px solid #27ae60;
+}
+
+.admin-donation-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.admin-donation-card p {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.admin-donation-card strong {
+  color: #2c3e50;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+  0% { opacity: 0; transform: translateY(40px); }
+  100% { opacity: 1; transform: translateY(0); }
+}

@@ -69,7 +69,7 @@ if (authModal) {
 
     } else {
       console.log("🔔 No user is currently signed in.");
-      authModal.style.display = "block"; // Optional: Show modal if not signed in
+      authModal.style.display = "block"; 
     }
   });
 });
@@ -142,6 +142,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
     showToast(`👋 Welcome back, ${userData.name} (${userData.role})`);
     toggleAuth(false);
+
+    fetchAndRenderUserDonations();
+
 
     // OPTIONAL: Store name in navbar
     const navName = document.getElementById("navUsername");
@@ -250,3 +253,7 @@ function submitDonation() {
       showToast("Error saving donation: " + error.message);
     });
 }
+
+
+window.db = db;
+window.auth = auth;
