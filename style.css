@@ -1022,73 +1022,63 @@ button {
   font-size: 1.5rem;
 }
 
+/* admin style */
 
-/* Admin Section Styles */
-.admin-section {
-  padding: 60px 30px;
-  background: #f9fafb;
+#adminPanel {
+  padding: 50px;
+  background: #f5f7fa;
   font-family: 'Poppins', sans-serif;
-  animation: fadeIn 0.8s ease;
+  animation: fadeIn 0.6s ease;
 }
 
-.admin-title {
+.admin-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 12px;
+  padding: 30px;
+  background: #ffffff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+}
+
+.admin-heading {
   text-align: center;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 40px;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.08);
-}
-
-.admin-subsection h3 {
-  font-size: 1.6rem;
+  font-size: 2rem;
+  margin-bottom: 30px;
   color: #333;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #27ae60;
-  display: inline-block;
-  padding-bottom: 4px;
 }
 
-.admin-donation-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
+.ngo-info {
+  background: #e8f7ec;
+  padding: 20px;
+  border-radius: 10px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 5px rgba(0, 128, 0, 0.1);
 }
 
 .admin-donation-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-  padding: 20px 25px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: slideUp 0.6s ease;
-  position: relative;
-  border-left: 6px solid #27ae60;
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px 0;
+  background: #fdfdfd;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
 }
 
-.admin-donation-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+.analytics-section {
+  margin-top: 40px;
+  padding: 20px;
+  border: 2px solid #00a87e;
+  border-radius: 10px;
+  background-color: #ecfff9;
 }
 
-.admin-donation-card p {
-  margin: 6px 0;
-  font-size: 0.95rem;
-  color: #555;
-  line-height: 1.5;
-}
-
-.admin-donation-card strong {
-  color: #2c3e50;
-}
-
-/* Animations */
 @keyframes fadeIn {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideUp {
-  0% { opacity: 0; transform: translateY(40px); }
-  100% { opacity: 1; transform: translateY(0); }
+
+
+#logoutBtn {
+  display: inline-block !important; /* force show */
 }

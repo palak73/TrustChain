@@ -220,9 +220,9 @@ async function confirmDonation() {
 
     const result = await response.json();
     if (result.is_fraud === 1) {
-      alert("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Please verify before donating.");
+      showToast("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Please verify before donating.");
     } else {
-      alert("✅ Safe! No fraud detected for this NGO based on their milestone data.");
+      showToast("✅ Safe! No fraud detected for this NGO based on their milestone data.");
     }
   } catch (err) {
     console.error("ML API error:", err);
@@ -399,6 +399,100 @@ window.showAdminPanel = function () {
   adminPanel.classList.remove("hidden");
 
   // Fetch donation data
-  fetchAllDonationsForAdmin();
+  //fetchAllDonationsForAdmin();
 };
 
+async function showAdminPanel() {
+  const user = firebase.auth().currentUser;
+  if (!user) return;
+
+  const userDoc = await db.collection("users").doc(user.uid).get();
+  const userData = userDoc.data();
+
+  if (userData.role !== "admin") {
+    showToast("⛔ Access denied. Not an admin.");
+    return;
+  }
+
+  if (userData.status !== "approved") {
+    showToast("⏳ Admin approval pending.");
+    return;
+  }
+
+  document.getElementById("adminSection").style.display = "block";
+  fetchAdminNGODetails(user.uid);
+}
+
+// fetch admin details
+
+async function fetchAdminNGODetails(adminId) {
+  const snapshot = await db.collection("ngos").where("adminId", "==", adminId).get();
+
+  if (snapshot.empty) {
+    document.getElementById("adminNgoContent").innerHTML = "<p>No NGO assigned yet.</p>";
+    return;
+  }
+
+  snapshot.forEach(doc => {
+    const ngo = doc.data();
+    renderAdminNGO(ngo);
+    fetchNGODonations(ngo.name); // Show donations to this NGO
+  });
+}
+
+function renderAdminNGO(ngo) {
+  document.getElementById("adminNgoContent").innerHTML = `
+    <h2>${ngo.name}</h2>
+    <p><strong>Category:</strong> ${ngo.category}</p>
+    <p><strong>Location:</strong> ${ngo.location}</p>
+    <p><strong>Goal:</strong> ₹${ngo.goal.toLocaleString()}</p>
+    <p><strong>Verified:</strong> ${ngo.verified ? "✅" : "❌"}</p>
+  `;
+}
+
+
+// analytics
+
+async function fetchNGODonations(ngoName) {
+  const snapshot = await db.collection("donations")
+    .where("ngoName", "==", ngoName)
+    .orderBy("timestamp", "desc")
+    .get();
+
+  const chartData = [];
+  const list = document.getElementById("adminDonationList");
+  list.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const d = doc.data();
+    chartData.push({ x: d.timestamp.toDate(), y: d.amount });
+
+    const li = document.createElement("li");
+    li.textContent = `${d.userName} donated ₹${d.amount} on ${d.timestamp.toDate().toLocaleString()}`;
+    list.appendChild(li);
+  });
+
+  renderDonationChart(chartData);
+}
+
+function renderDonationChart(data) {
+  const ctx = document.getElementById("donationChart").getContext("2d");
+
+  new Chart(ctx, {
+    type: "line",
+    data: {
+      datasets: [{
+        label: "Donations Over Time",
+        data,
+        borderColor: "#28a745",
+        fill: false,
+      }],
+    },
+    options: {
+      scales: {
+        x: { type: 'time', time: { unit: 'day' } },
+        y: { beginAtZero: true }
+      },
+    },
+  });
+}

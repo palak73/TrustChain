@@ -30,6 +30,9 @@
         <li><button onclick="toggleAuth(true)">Login / Register</button></li>
         <li><button id="connectWallet" class="wallet-button">Connect Wallet</button></li>
         <li id="userDisplay" class="user-info" style="color:white; font-weight:500;"></li>
+        <li><button onclick="logout()" id="logoutBtn" class="wallet-button hidden">Logout</button></li>
+        <span id="userWelcome" style="color:white; margin-left: 15px;"></span>
+
 
       </ul>
     </div>
@@ -114,15 +117,28 @@
     </div>
   </section>
 
+<!-- Admin -->
 
-<section id="adminPanel" class="admin-section hidden">
-  <h2 class="admin-title">🎯 Admin Dashboard</h2>
+<section id="adminPanel" class="section hidden">
+  <div class="admin-container">
+    <h2 class="admin-heading">Your Admin Dashboard</h2>
 
-  <div class="admin-subsection">
-    <h3>📦 All Donations</h3>
-    <div id="allDonationsContainer" class="admin-donation-grid"></div>
+    <div class="ngo-info" id="adminNGODetails">
+      <!-- NGO Info will be populated here -->
+    </div>
+
+    <div class="analytics-section">
+      <h3>Donation Analytics</h3>
+      <canvas id="donationChart" width="400" height="200"></canvas>
+    </div>
+
+    <div class="donation-list">
+      <h3>Donations to Your NGO</h3>
+      <div id="adminDonationCards"></div>
+    </div>
   </div>
 </section>
+
 
 
 
@@ -131,9 +147,7 @@
     2025 &copy; Trust Chain. All Rights Reserved.
   </footer>
 
-  <script type="module" src="js\script.js"></script>
-  <script type="module" src="js\ether.js"></script>
-  <!-- <script src="donor.js"></script> -->
+  
 
   <div id="toast" class="toast-message">
     <span id="toast-text"></span>
@@ -199,6 +213,8 @@
  <script type="module" src="js/auth.js"></script> 
 <script type="module" src="js/script.js"></script>
 <script type="module" src="js/ether.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
  
 </body>

@@ -22,9 +22,6 @@ const db = firebase.firestore();
 
 
 
-//  Ensure these are defined and not null before accessing their properties
-
-// Make sure the DOM is loaded before accessing elements
 window.addEventListener("DOMContentLoaded", () => {
   // Check if the auth modal exists before using .style
   const authModal = document.getElementById("authModal");
@@ -120,7 +117,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
 
 
-// Assuming you're using Firebase v8 (compat)
+//  Firebase v8 (compat)
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const email = document.getElementById("loginEmail").value;
@@ -129,6 +126,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   try {
     const userCredential = await auth.signInWithEmailAndPassword(email, password);
     const user = userCredential.user;
+    
 
     const docRef = db.collection("users").doc(user.uid);
     const doc = await docRef.get();
@@ -143,7 +141,29 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     showToast(`👋 Welcome back, ${userData.name} (${userData.role})`);
     toggleAuth(false);
 
+     document.getElementById("logoutBtn").classList.remove("hidden");
+  document.getElementById("userWelcome").innerText = `Hi, ${userData.name}`;
+
     fetchAndRenderUserDonations();
+
+    if (userData.role === "admin") {
+  // Show admin panel + other sections
+  document.getElementById("adminPanel")?.classList.remove("hidden");
+  document.getElementById("donor")?.classList.remove("hidden");
+  document.getElementById("ngos")?.classList.remove("hidden");
+
+  // Optionally highlight admin in navbar
+  document.getElementById("userWelcome").innerText = `👤 Admin: ${userData.name}`;
+
+} else {
+  // Regular user (donor)
+  document.getElementById("donor")?.classList.remove("hidden");
+  document.getElementById("ngos")?.classList.remove("hidden");
+  document.getElementById("adminPanel")?.classList.add("hidden");
+
+  document.getElementById("userWelcome").innerText = `👤 ${userData.name}`;
+}
+
 
 
     // OPTIONAL: Store name in navbar
@@ -154,27 +174,13 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     // if (userData.role === "admin") {
     //   window.location.href = "/admin-dashboard.html";
     // }
+
   } catch (error) {
     console.error(error.message);
     showToast("⚠️ " + error.message);
   }
 });
 
-
-
-
-// auth.onAuthStateChanged(async (user) => {
-//   if (user) {
-//     const doc = await db.collection("users").doc(user.uid).get();
-//     const role = doc.data().role;
-
-//     document.getElementById("donor").style.display = role === "user" ? "block" : "none";
-//     document.getElementById("admin").style.display = role === "admin" ? "block" : "none";
-//   } else {
-//     document.getElementById("donor").style.display = "none";
-//     document.getElementById("admin").style.display = "none";
-//   }
-// });
 
 
 auth.onAuthStateChanged(async (user) => {
@@ -257,3 +263,22 @@ function submitDonation() {
 
 window.db = db;
 window.auth = auth;
+
+
+
+
+window.logout = async function () {
+  try {
+    await firebase.auth().signOut();
+
+    showToast("👋 You have been logged out.");
+    document.getElementById("logoutBtn").classList.add("hidden");
+    document.getElementById("userWelcome").innerText = "";
+
+    // Optionally reload or redirect to home
+    window.location.href = "#home"; // or just: window.location.reload();
+  } catch (error) {
+    console.error("Logout failed:", error);
+    showToast("❌ Logout failed");
+  }
+};

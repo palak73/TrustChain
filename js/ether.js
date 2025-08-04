@@ -24,6 +24,17 @@ conv.innerHTML = `1 ETH = ₹${data.ethereum.inr}`;
 
 
 
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  const toastText = document.getElementById("toast-text");
+  toastText.textContent = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 3000);
+}
+
 
 function getCurrentContract() {
     const index = window.ContractIndex || 0;
@@ -40,7 +51,7 @@ connectbtn.addEventListener('click', async () => {
         provider = new ethers.providers.Web3Provider(window.ethereum);
     }
     else {
-        alert("No Ethereum Provider like Metamask installed");
+        showToast("No Ethereum Provider like Metamask installed");
         throw new Error("No Ethereum Provider like Metamask installed");
     }
     try {
@@ -48,7 +59,7 @@ connectbtn.addEventListener('click', async () => {
     }
     catch (error) {
         if (error.code == 4001) {
-            alert("User Denied access");
+           showToast("User Denied access");
             console.error("User Denied access");
         }
     }
@@ -96,7 +107,7 @@ EthSend.addEventListener('click', async () => {
     }
     catch (err) {
         load.innerHTML = `Transaction Failed`;
-        alert("Transaction failed");
+        showToast("Transaction failed");
     }
 
     loadingScreen.style.display = "none";
