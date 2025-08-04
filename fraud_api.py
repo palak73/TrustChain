@@ -1,9 +1,11 @@
-
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import pandas as pd
 import joblib
 
 app = Flask(__name__)
+CORS(app)  # 👈 Must be placed right after app creation
+
 model = joblib.load('fraud_rf_model.pkl')
 
 @app.route('/')
@@ -51,7 +53,6 @@ def predict():
         df = pd.DataFrame([ml_input])
         prediction = model.predict(df[features])[0]
 
-        # ✨ Human-readable explanation logic
         explanation = ""
         if prediction == 1:
             explanation = "🚨 This NGO is flagged as potentially fraudulent due to unusual spending behavior."
@@ -71,4 +72,8 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+
+
 
