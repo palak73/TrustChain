@@ -118,16 +118,19 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
 
 //  Firebase v8 (compat)
+window.addEventListener("DOMContentLoaded", () => {
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
+
   const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
 
   try {
+    // Sign in with Firebase Auth
     const userCredential = await auth.signInWithEmailAndPassword(email, password);
     const user = userCredential.user;
-    
 
+    // Fetch user document from Firestore
     const docRef = db.collection("users").doc(user.uid);
     const doc = await docRef.get();
 
@@ -137,48 +140,55 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     }
 
     const userData = doc.data();
+    const role = userData.role;
 
-    showToast(`👋 Welcome back, ${userData.name} (${userData.role})`);
+    // Welcome message
+    showToast(`👋 Welcome back, ${userData.name} (${role})`);
+
+    // Hide auth modal
     toggleAuth(false);
 
-     document.getElementById("logoutBtn").classList.remove("hidden");
-  document.getElementById("userWelcome").innerText = `Hi, ${userData.name}`;
+    // Show logout button
+    document.getElementById("logoutBtn")?.classList.remove("hidden");
 
-    fetchAndRenderUserDonations();
+    // Display name in navbar
+    const welcome = document.getElementById("userWelcome");
+    if (welcome) {
+      welcome.innerText = role === "admin"
+        ? `👤 Admin: ${userData.name}`
+        : `👤 ${userData.name}`;
+    }
 
-    if (userData.role === "admin") {
-  // Show admin panel + other sections
+    // Show sections based on role
+    document.getElementById("donor")?.classList.remove("hidden");
+    document.getElementById("ngos")?.classList.remove("hidden");
+
+    if (role === "admin") {
   document.getElementById("adminPanel")?.classList.remove("hidden");
   document.getElementById("donor")?.classList.remove("hidden");
   document.getElementById("ngos")?.classList.remove("hidden");
-
-  // Optionally highlight admin in navbar
   document.getElementById("userWelcome").innerText = `👤 Admin: ${userData.name}`;
-
-} else {
-  // Regular user (donor)
+    } else {
   document.getElementById("donor")?.classList.remove("hidden");
   document.getElementById("ngos")?.classList.remove("hidden");
   document.getElementById("adminPanel")?.classList.add("hidden");
-
   document.getElementById("userWelcome").innerText = `👤 ${userData.name}`;
-}
+    }
+    
 
+    // Render user donation history
+    fetchAndRenderUserDonations();
 
-
-    // OPTIONAL: Store name in navbar
+    // (Optional) Set name in navbar (if using a different span)
     const navName = document.getElementById("navUsername");
     if (navName) navName.textContent = userData.name;
 
-    // OPTIONAL: Redirect
-    // if (userData.role === "admin") {
-    //   window.location.href = "/admin-dashboard.html";
-    // }
-
   } catch (error) {
-    console.error(error.message);
+    console.error("Login Error:", error.message);
     showToast("⚠️ " + error.message);
   }
+});
+
 });
 
 

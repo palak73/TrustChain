@@ -94,28 +94,27 @@
 
   <!-- DONOR SECTION -->
   <section id="donor" class="donor-section">
-    <h2 class="section-heading">Welcome Donor 👋</h2>
-    <p class="donor-intro">Support your favorite NGOs. Track your donations and make a difference.</p>
+  <h2 class="section-heading">Welcome Donor 👋</h2>
+  <p class="donor-intro">Support your favorite NGOs. Track your donations and make a difference.</p>
 
-    <div class="donation-form">
-      <input type="text" id="donorName" placeholder="Your Name" required>
-      <input type="email" id="donorEmail" placeholder="Your Email" required>
-      <select id="mySelect" class="donation-select">
-        <option value="">-- Please choose an option --</option>
-        <!-- <option value="option1">NGO 1</option>
-        <option value="option2">NGO 2</option>
-        <option value="option3">NGO 3</option> -->
-      </select> <input type="number" id="donorAmount" placeholder="Donation Amount (₹)" required>
-      <button onclick="submitDonation()">Donate Now</button>
-    </div>
-
-    <div class="donation-history">
-      <h3>Your Previous Donations</h3>
-      <div id="donationCardsContainer" class="donation-cards-wrapper">
-    <!-- Donation cards will be dynamically inserted here -->
+  <div class="donation-form">
+    <input type="text" id="donorName" placeholder="Your Name" required>
+    <input type="email" id="donorEmail" placeholder="Your Email" required>
+    <select id="mySelect" class="donation-select">
+      <option value="">-- Please choose an NGO --</option>
+    </select>
+    <input type="number" id="donorAmount" placeholder="Donation Amount (₹)" required>
+    <button onclick="submitDonation()">Donate Now</button>
   </div>
+
+  <div class="donation-history">
+    <h3>Your Previous Donations</h3>
+    <div id="donationCardsContainer" class="donation-cards-wrapper">
+      <!-- Donation cards will be shown here -->
     </div>
-  </section>
+  </div>
+</section>
+
 
 <!-- Admin -->
 

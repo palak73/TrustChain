@@ -1,3 +1,4 @@
+
 const images = [
   'img/ngo1.jpg',
   'img/ngo2.jpg',
@@ -39,40 +40,18 @@ function swapImages() {
 setInterval(swapImages, 5000);
 
 
-
-//  Firebase Config & Initialization
-// const firebaseConfig = {
-//   apiKey: "YOUR_API_KEY",
-//   authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-//   projectId: "YOUR_PROJECT_ID",
-//   storageBucket: "YOUR_PROJECT_ID.appspot.com",
-//   messagingSenderId: "YOUR_SENDER_ID",
-//   appId: "YOUR_APP_ID"
-// };
-// firebase.initializeApp(firebaseConfig);
-// const db = firebase.firestore();
-
 // Global Variables
 let allNGOs = [];
 let selectedNGO = null;
 
 //  Fetch NGO Data from npoint.io JSON API
-fetch("https://api.npoint.io/4b3ba36ced7964410dd9")
+fetch("https://api.npoint.io/1b9476c90b214a9d9bc8")
   .then(res => res.json())
   .then(data => {
-     allNGOs = data.map(ngo => ({
-            name: ngo.name,      // ✅ fixed
-            verified: ngo.verified,
-            milestones: ngo.milestones,
-            category: ngo.category || "General",       // ✅ safe fallback
-            location: ngo.location || "Unknown",       // ✅ safe fallback
-            goal: ngo.goal || 50000,                   // ✅ safe fallback
-            website: ngo.website || ""                 // ✅ safe fallback
-        }));
-  
-  renderNGOCards(allNGOs);
-        console.log(allNGOs);
-    })
+    allNGOs = data;
+    renderNGOCards(allNGOs);
+    console.log(data);
+  })
   .catch((err) => {
     console.error("Failed to load NGOs:", err);
   });
@@ -132,6 +111,37 @@ function filterNGOs() {
   renderNGOCards(filtered);
 }
 
+
+
+
+function renderDonationCards(donations) {
+  const container = document.getElementById("donationCardsContainer");
+  container.innerHTML = "";
+
+  if (!donations.length) {
+    container.innerHTML = "<p>You haven't donated yet. Start supporting an NGO!</p>";
+    return;
+  }
+
+  donations.forEach((donation) => {
+    const card = document.createElement("div");
+    card.className = "donation-card";
+
+    card.innerHTML = `
+      <h4>${donation.ngoName}</h4>
+      <p class="donation-amount">₹${donation.amount}</p>
+      <p><strong>Date:</strong> ${donation.date || "N/A"}</p>
+      <p><strong>Method:</strong> ${donation.method || "Wallet"}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
+
+
+
+
 //  Donation Modal
 function openDonateModal(index) {
   window.Contractindex = index;
@@ -160,70 +170,75 @@ function showToast(message) {
     toast.classList.remove("show");
   }, 3000);
 }
+// Save donation to firebase and run ml 
 
-// function confirmDonation() {
-  // const amount = donationAmount.value;
-  // if (amount && parseFloat(amount) > 0) {
-  //   showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
-  //   closeModal();
-  // } else {
-  //   showToast("⚠️ Please enter a valid donation amount.");
-  // }
-
- async function confirmDonation() {
+async function confirmDonation() {
   const amount = parseFloat(donationAmount.value);
+  const user = firebase.auth().currentUser;
+
+  if (!user) {
+    showToast("⚠️ Please login to donate.");
+    return;
+  }
+
   if (!amount || amount <= 0 || isNaN(amount)) {
     showToast("⚠️ Please enter a valid donation amount.");
     return;
   }
 
-  const currentNgoName = document.getElementById("modalNgoName").innerText;
-  const currentNgo = allNGOs.find(
-    ngo => ngo.name.toLowerCase().trim() === currentNgoName.toLowerCase().trim()
-  );
+  // --- Fraud Detection via ML API ---
+  const selectedMilestones = selectedNGO.milestones || [
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.95, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.98, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.20, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 }
+  ];
 
-  if (!currentNgo) {
-    showToast("Failed to verify NGO data. Please try again later.");
-    return;
-  }
-
-  const milestones = currentNgo.milestones && currentNgo.milestones.length > 0 
-    ? currentNgo.milestones
-    : [
-        { Req: currentNgo.goal / 3, Exp: (currentNgo.goal / 3) * 0.95, Receipts_Uploaded: currentNgo.verified ? 1 : 0 },
-        { Req: currentNgo.goal / 3, Exp: (currentNgo.goal / 3) * 0.98, Receipts_Uploaded: currentNgo.verified ? 1 : 0 },
-        { Req: currentNgo.goal / 3, Exp: (currentNgo.goal / 3) * 0.20, Receipts_Uploaded: currentNgo.verified ? 1 : 0 }
-      ];
-
-  const mlRequest = {
-    milestones: milestones,
-    donation_amount: amount
+  const payload = {
+    donation_amount: amount * 80000, // assuming 1 ETH = ₹80,000
+    milestones: selectedMilestones
   };
 
   try {
     const response = await fetch("https://ngotracking-2.onrender.com/predict", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(mlRequest)
+      body: JSON.stringify(payload)
     });
 
     const result = await response.json();
-    if (result.error) {
-      showToast("Error: " + result.error);
-    } else if (result.is_fraud === 1) {
-      showToast("⚠️ High risk! This NGO may be fraudulent.");
+    if (result.is_fraud === 1) {
+      showToast("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Please verify before donating.");
     } else {
-      showToast("✅ No fraud detected. Proceed with donation.");
+      showToast("✅ Safe! No fraud detected for this NGO based on their milestone data.");
     }
+  } catch (err) {
+    console.error("ML API error:", err);
+    alert("⚠️ Failed to verify NGO data. Proceeding with donation anyway.");
+  }
 
+  // --- Save Donation to Firebase ---
+  const donationData = {
+    userId: user.uid,
+    userName: user.displayName || "Anonymous",
+    ngoName: selectedNGO.name,
+    amount: amount,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection("donations").add(donationData);
+    showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+    closeModal();
+    fetchAndRenderUserDonations(); // Refresh donation history
   } catch (error) {
-    console.error(error);
-    showToast("⚠️ Failed to contact ML verification system.");
+    console.error("Donation save failed:", error);
+    showToast("❌ Donation could not be saved.");
   }
 }
 
-
 confirmDonateBtn.addEventListener("click", confirmDonation);
+
+
 
 // Event Listeners
 searchInput.addEventListener("input", filterNGOs);
@@ -322,38 +337,57 @@ window.addEventListener("scroll", () => {
   }
 });
 
+// Admin 
+
+async function fetchAllDonationsForAdmin() {
+  const container = document.getElementById("allDonationsContainer");
+  container.innerHTML = "";
+
+  try {
+    const snapshot = await db.collection("donations").orderBy("timestamp", "desc").get();
+
+    if (snapshot.empty) {
+      container.innerHTML = "<p>No donations yet.</p>";
+      return;
+    }
+
+    snapshot.forEach((doc) => {
+      const d = doc.data();
+      const date = d.timestamp?.toDate().toLocaleString() || "Unknown";
+
+      const card = document.createElement("div");
+      card.className = "admin-donation-card";
+
+      card.innerHTML = `
+        <p><strong>User:</strong> ${d.userName}</p>
+        <p><strong>NGO:</strong> ${d.ngoName}</p>
+        <p><strong>Amount:</strong> ₹${d.amount}</p>
+        <p><strong>Date:</strong> ${date}</p>
+      `;
+
+      container.appendChild(card);
+    });
+  } catch (err) {
+    console.error("Error fetching all donations:", err);
+  }
+}
 
 
+window.showAdminPanel = function () {
+  const adminPanel = document.getElementById("adminPanel");
+  if (!adminPanel) return;
 
+  // Hide other sections
+  document.querySelectorAll("section").forEach((sec) => {
+    if (sec.id !== "adminPanel") sec.classList.add("hidden");
+  });
 
+  // Show admin panel
+  adminPanel.classList.remove("hidden");
 
-
-
-
-    
-
-
-
-
-
-
- 
-   
- 
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
+  // Fetch donation data
+  //fetchAllDonationsForAdmin();
+};
 
 async function showAdminPanel() {
   const user = firebase.auth().currentUser;
