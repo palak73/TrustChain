@@ -183,11 +183,10 @@ function showToast(message) {
     toast.classList.remove("show");
   }, 3000);
 }
-
-
+// Save donation to firebase and run ml 
 
 async function confirmDonation() {
-  const amount = donationAmount.value;
+  const amount = parseFloat(donationAmount.value);
   const user = firebase.auth().currentUser;
 
   if (!user) {
@@ -195,55 +194,62 @@ async function confirmDonation() {
     return;
   }
 
-  if (amount && parseFloat(amount) > 0) {
-    const donationData = {
-      userId: user.uid,
-      userName: user.displayName || "Anonymous",
-      ngoName: selectedNGO.name,
-      amount: parseFloat(amount),
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
-
-    try {
-      await db.collection("donations").add(donationData);
-      showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
-      closeModal();
-      fetchAndRenderUserDonations(); // update list
-    } catch (error) {
-      console.error("Donation failed:", error);
-      showToast("❌ Donation could not be saved.");
-    }
-  } else {
+  if (!amount || amount <= 0 || isNaN(amount)) {
     showToast("⚠️ Please enter a valid donation amount.");
+    return;
   }
-}
 
-async function fetchAndRenderUserDonations() {
-  const user = firebase.auth().currentUser;
-  if (!user) return;
+  // --- Fraud Detection via ML API ---
+  const selectedMilestones = selectedNGO.milestones || [
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.95, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.98, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+    { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.20, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 }
+  ];
 
-  const container = document.getElementById("donationCardsContainer");
-  container.innerHTML = "";
+  const payload = {
+    donation_amount: amount * 80000, // assuming 1 ETH = ₹80,000
+    milestones: selectedMilestones
+  };
 
   try {
-    const snapshot = await db.collection("donations")
-      .where("userId", "==", user.uid)
-      .orderBy("timestamp", "desc")
-      .get();
+    const response = await fetch("https://ngotracking-2.onrender.com/predict", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-    const donations = snapshot.docs.map(doc => ({
-      ...doc.data(),
-      date: doc.data().timestamp?.toDate().toLocaleDateString()
-    }));
-
-    renderDonationCards(donations);  // ✅ Now this works
+    const result = await response.json();
+    if (result.is_fraud === 1) {
+      alert("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Please verify before donating.");
+    } else {
+      alert("✅ Safe! No fraud detected for this NGO based on their milestone data.");
+    }
   } catch (err) {
-    console.error("Error fetching donations:", err);
-    container.innerHTML = "<p>⚠️ Failed to load donations.</p>";
+    console.error("ML API error:", err);
+    alert("⚠️ Failed to verify NGO data. Proceeding with donation anyway.");
+  }
+
+  // --- Save Donation to Firebase ---
+  const donationData = {
+    userId: user.uid,
+    userName: user.displayName || "Anonymous",
+    ngoName: selectedNGO.name,
+    amount: amount,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  try {
+    await db.collection("donations").add(donationData);
+    showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+    closeModal();
+    fetchAndRenderUserDonations(); // Refresh donation history
+  } catch (error) {
+    console.error("Donation save failed:", error);
+    showToast("❌ Donation could not be saved.");
   }
 }
 
-
+confirmDonateBtn.addEventListener("click", confirmDonation);
 
 
 
