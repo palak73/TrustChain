@@ -1,8 +1,8 @@
 
 const images = [
-  'img/ngo1.jpg',
-  'img/ngo2.jpg',
-  'img/ngo3.jpg'
+  'img/ngo4.jpg',
+  'img/ngo5.jpg',
+  'img/ngo6.jpg'
 ];
 
 let index = 0;
@@ -55,6 +55,7 @@ fetch("https://api.npoint.io/1b9476c90b214a9d9bc8")
   .catch((err) => {
     console.error("Failed to load NGOs:", err);
   });
+  
 
 // DOM References
 const ngoContainer = document.getElementById("ngoCards");
