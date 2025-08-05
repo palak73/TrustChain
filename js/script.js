@@ -186,7 +186,6 @@ async function confirmDonation() {
     return;
   }
 
-  // --- Fraud Detection via ML API ---
   const selectedMilestones = selectedNGO.milestones || [
     { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.95, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
     { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.98, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
@@ -198,6 +197,8 @@ async function confirmDonation() {
     milestones: selectedMilestones
   };
 
+  let isFraud = false;
+
   try {
     const response = await fetch("https://ngotracking-2.onrender.com/predict", {
       method: "POST",
@@ -206,17 +207,23 @@ async function confirmDonation() {
     });
 
     const result = await response.json();
+
     if (result.is_fraud === 1) {
-      showToast("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Please verify before donating.");
+      showToast("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Donation stopped.");
+      isFraud = true;
     } else {
       showToast("✅ Safe! No fraud detected for this NGO based on their milestone data.");
     }
   } catch (err) {
     console.error("ML API error:", err);
-    alert("⚠️ Failed to verify NGO data. Proceeding with donation anyway.");
+    alert("⚠️ Failed to verify NGO data. Donation is not saved.");
+    return;
   }
 
-  // --- Save Donation to Firebase ---
+  // ⛔️ Abort donation if flagged as fraud
+  if (isFraud) return;
+
+  // ✅ Save donation only if not fraudulent
   const donationData = {
     userId: user.uid,
     userName: user.displayName || "Anonymous",
@@ -229,7 +236,7 @@ async function confirmDonation() {
     await db.collection("donations").add(donationData);
     showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
     closeModal();
-    fetchAndRenderUserDonations(); // Refresh donation history
+    fetchAndRenderUserDonations(); // Update donation list
   } catch (error) {
     console.error("Donation save failed:", error);
     showToast("❌ Donation could not be saved.");
