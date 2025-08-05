@@ -2,25 +2,25 @@
    [
   {
     "name": "Smile Foundation",
-    "verified": true,
+    "verified": false,
     "milestones": [
       {
         "title": "Food Distribution",
         "Req": 22000,
-        "Exp": 20000,
-        "Receipts_Uploaded": true
+        "Exp": 200,
+        "Receipts_Uploaded": false
       },
       {
         "title": "Transport",
         "Req": 15000,
-        "Exp": 15000,
-        "Receipts_Uploaded": true
+        "Exp": 150,
+        "Receipts_Uploaded": false
       },
       {
         "title": "Medical Kit",
         "Req": 12000,
-        "Exp": 10000,
-        "Receipts_Uploaded": true
+        "Exp": 100,
+        "Receipts_Uploaded": false
       }
     ]
   },
