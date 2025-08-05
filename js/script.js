@@ -45,7 +45,7 @@ let allNGOs = [];
 let selectedNGO = null;
 
 //  Fetch NGO Data from npoint.io JSON API
-fetch("https://api.npoint.io/1b9476c90b214a9d9bc8")
+fetch("https://api.npoint.io/5b504e79c40d1972f711")
   .then(res => res.json())
   .then(data => {
     allNGOs = data;
