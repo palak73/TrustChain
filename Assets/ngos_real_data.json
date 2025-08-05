@@ -1,28 +1,31 @@
 
-   [
+ [
   {
     "name": "Smile Foundation",
-    "verified": true,
+    "verified": false,
     "milestones": [
       {
         "title": "Food Distribution",
         "Req": 22000,
-        "Exp": 20000,
-        "Receipts_Uploaded": true
+        "Exp": 200,
+        "Receipts_Uploaded": false
       },
       {
         "title": "Transport",
         "Req": 15000,
-        "Exp": 15000,
-        "Receipts_Uploaded": true
+        "Exp": 150,
+        "Receipts_Uploaded": false
       },
       {
         "title": "Medical Kit",
         "Req": 12000,
-        "Exp": 10000,
-        "Receipts_Uploaded": true
+        "Exp": 100,
+        "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 49000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Goonj",
@@ -46,7 +49,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 29000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Akshaya Patra Foundation",
@@ -70,7 +76,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 25000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "HelpAge India",
@@ -94,7 +103,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 32000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Teach For India",
@@ -118,7 +130,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 41000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Pratham Education Foundation",
@@ -142,7 +157,10 @@
         "Exp": 12000,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 50000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Make A Difference (MAD)",
@@ -166,7 +184,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 20000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "CRY \u0096 Child Rights and You",
@@ -190,7 +211,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 48000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Save The Children India",
@@ -214,7 +238,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 28000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Sankara Eye Foundation",
@@ -238,7 +265,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 20000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "The Bharat Scouts & Guides",
@@ -262,7 +292,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 28000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "AROH Foundation",
@@ -286,7 +319,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 21000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "WOMEN AND CHILD CARE ORGANISATION",
@@ -310,7 +346,10 @@
         "Exp": 12000,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 39000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Sagar Trust",
@@ -334,7 +373,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 25000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Sadik Masih Medical Social Servant Society",
@@ -358,7 +400,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 38000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Christian Social Welfare Trust (CSWT)",
@@ -382,7 +427,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 24000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Blue Birds Social Welfare Society",
@@ -406,7 +454,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 42000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Ganga Social Foundation",
@@ -430,7 +481,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 28000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Swadeshi Movement Foundation (SMF)",
@@ -454,7 +508,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 22000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Samanvit Shiksha Sansthan",
@@ -478,7 +535,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 15000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "AVN College of Management & Technology",
@@ -502,7 +562,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 33000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Novlok Welfare Society",
@@ -526,7 +589,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 22000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Noble Cause Social & Health Care Organization",
@@ -550,7 +616,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 30000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Mother of Life Trust",
@@ -574,7 +643,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 34000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Samrasta Foundation",
@@ -598,7 +670,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 28000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Saraswati Educational Society",
@@ -622,7 +697,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 20000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Shiksha Seva Trust",
@@ -646,7 +724,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 44000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Helping Hands Foundation",
@@ -670,7 +751,10 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 29000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Saathi Foundation",
@@ -694,7 +778,10 @@
         "Exp": 0,
         "Receipts_Uploaded": true
       }
-    ]
+    ],
+    "goal": 21000,
+    "category": "Health & Welfare",
+    "location": "India"
   },
   {
     "name": "Humanity Trust",
@@ -718,6 +805,9 @@
         "Exp": 0,
         "Receipts_Uploaded": false
       }
-    ]
+    ],
+    "goal": 30000,
+    "category": "Health & Welfare",
+    "location": "India"
   }
 ]
