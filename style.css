@@ -445,10 +445,15 @@ body {
 }
 
 footer {
-  height: 35px;
+  height: 175px;
   text-align: center;
   background-color: #0b5ed7;
   border-radius: 5px;
+}
+#footer-rights{
+  display: flex;
+  justify-content: space-between;
+  
 }
 
 .donor-heading {
