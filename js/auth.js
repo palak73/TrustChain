@@ -251,7 +251,7 @@ window.addEventListener("DOMContentLoaded", () => {
       const doc = await docRef.get();
 
       if (!doc.exists) {
-        showToast("⚠️ User data not found in Firestore.");
+        //showToast("⚠️ User data not found in Firestore.");
         return;
       }
 
@@ -296,7 +296,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     } catch (error) {
       console.error("Login Error:", error.message);
-      showToast("⚠️ " + error.message);
+      //showToast("⚠️ " + error.message);
     }
   });
 });
@@ -390,7 +390,7 @@ function submitDonation() {
       document.getElementById("donorAmount").value = "";
     })
     .catch((error) => {
-      showToast("Error saving donation: " + error.message);
+      //showToast("Error saving donation: " + error.message);
     });
 }
 

@@ -290,7 +290,7 @@ async function confirmDonation() {
     }
   } catch (err) {
     console.error("ML API error:", err);
-    alert("⚠️ Failed to verify NGO data. Donation is not saved.");
+    showToast("⚠️ Failed to verify NGO data. Donation is not saved.");
     return;
   }
 
@@ -495,7 +495,7 @@ async function showAdminPanel() {
 
   if (userData.status !== "approved") {
     showToast("⏳ Admin approval pending.");
-    return;
+    return;+
   }
 
   document.getElementById("adminSection").style.display = "block";
@@ -578,16 +578,32 @@ function renderDonationChart(data) {
 
 
 
+// async function submitTheDonation() {
+//   const amountInput = document.getElementById("donationAmount");
+//   const amount = parseFloat(amountInput.value);
 
+//   if (!amount || amount <= 0) {
+//     alert("Please enter a valid amount");
+//     return;
+//   }
 
+//   const user = auth.currentUser;
+//   if (!user) {
+//     alert("Please log in to donate.");
+//     return;
+//   }
 
-// function showSection(sectionId) {
-//   document.querySelectorAll("section").forEach((section) => {
-//     section.classList.add("hidden");
-//   });
-
-//   const activeSection = document.getElementById(sectionId);
-//   if (activeSection) {
-//     activeSection.classList.remove("hidden");
+//   try {
+//     await addDoc(collection(db, "donations"), {
+//       userId: user.uid,
+//       amount: amount,
+//       timestamp: serverTimestamp(),
+//     });
+//     alert("Donation successful!");
+//     amountInput.value = "";
+//   } catch (error) {
+//     console.error("Error saving donation:", error);
+//     alert("Donation failed.");
 //   }
 // }
+
