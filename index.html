@@ -179,6 +179,10 @@
       <input type="text" id="registerName" placeholder="Full Name" required>
       <input type="email" id="registerEmail" placeholder="Email" required>
       <input type="password" id="registerPassword" placeholder="Password" required>
+      <div id="ngoNameField" class="hidden">
+  <input type="text" id="ngoName" placeholder="NGO Name">
+</div>
+
 
       <!-- Role Selection -->
       <div class="role-toggle">
@@ -214,6 +218,20 @@
 <script type="module" src="js/ether.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
+
+<script>document.querySelectorAll('input[name="role"]').forEach((radio) => {
+  radio.addEventListener('change', () => {
+    const selectedRole = document.querySelector('input[name="role"]:checked').value;
+    const ngoField = document.getElementById('ngoNameField');
+    if (selectedRole === 'ngo-admin') {
+      ngoField.classList.remove('hidden');
+    } else {
+      ngoField.classList.add('hidden');
+    }
+  });
+});
+</script>
 
  
 </body>

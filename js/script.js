@@ -173,6 +173,79 @@ function showToast(message) {
 }
 // Save donation to firebase and run ml 
 
+// async function confirmDonation() {
+//   const amount = parseFloat(donationAmount.value);
+//   const user = firebase.auth().currentUser;
+
+//   if (!user) {
+//     showToast("⚠️ Please login to donate.");
+//     return;
+//   }
+
+//   if (!amount || amount <= 0 || isNaN(amount)) {
+//     showToast("⚠️ Please enter a valid donation amount.");
+//     return;
+//   }
+
+//   const selectedMilestones = selectedNGO.milestones || [
+//     { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.95, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+//     { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.98, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 },
+//     { Req: selectedNGO.goal / 3, Exp: (selectedNGO.goal / 3) * 0.20, Receipts_Uploaded: selectedNGO.verified ? 1 : 0 }
+//   ];
+
+//   const payload = {
+//     donation_amount: amount * 80000, // assuming 1 ETH = ₹80,000
+//     milestones: selectedMilestones
+//   };
+
+//   let isFraud = false;
+
+//   try {
+//     const response = await fetch("https://ngotracking-2.onrender.com/predict", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       body: JSON.stringify(payload)
+//     });
+
+//     const result = await response.json();
+
+//     if (result.is_fraud === 1) {
+//       showToast("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Donation stopped.");
+//       isFraud = true;
+//     } else {
+//       showToast("✅ Safe! No fraud detected for this NGO based on their milestone data.");
+//     }
+//   } catch (err) {
+//     console.error("ML API error:", err);
+//     alert("⚠️ Failed to verify NGO data. Donation is not saved.");
+//     return;
+//   }
+
+//   // ⛔️ Abort donation if flagged as fraud
+//   if (isFraud) return;
+
+//   // ✅ Save donation only if not fraudulent
+//   const donationData = {
+//     userId: user.uid,
+//     userName: user.displayName || "Anonymous",
+//     ngoName: selectedNGO.name,
+//     amount: amount,
+//     timestamp: firebase.firestore.FieldValue.serverTimestamp()
+//   };
+
+//   try {
+//     await db.collection("donations").add(donationData);
+//     showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+//     closeModal();
+//     fetchAndRenderUserDonations(); // Update donation list
+//   } catch (error) {
+//     console.error("Donation save failed:", error);
+//     showToast("❌ Donation could not be saved.");
+//   }
+// }
+
+
+
 async function confirmDonation() {
   const amount = parseFloat(donationAmount.value);
   const user = firebase.auth().currentUser;
@@ -194,7 +267,7 @@ async function confirmDonation() {
   ];
 
   const payload = {
-    donation_amount: amount * 80000, // assuming 1 ETH = ₹80,000
+    donation_amount: amount * 80000,
     milestones: selectedMilestones
   };
 
@@ -211,9 +284,9 @@ async function confirmDonation() {
 
     if (result.is_fraud === 1) {
       showToast("⚠️ Heads up! This NGO might be suspicious based on milestone spending. Donation stopped.");
-      isFraud = true;
+      return;
     } else {
-      showToast("✅ Safe! No fraud detected for this NGO based on their milestone data.");
+      showToast("✅ No fraud detected for this NGO.");
     }
   } catch (err) {
     console.error("ML API error:", err);
@@ -221,28 +294,40 @@ async function confirmDonation() {
     return;
   }
 
-  // ⛔️ Abort donation if flagged as fraud
-  if (isFraud) return;
-
-  // ✅ Save donation only if not fraudulent
-  const donationData = {
-    userId: user.uid,
-    userName: user.displayName || "Anonymous",
-    ngoName: selectedNGO.name,
-    amount: amount,
-    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-  };
-
+  // Here donation is considered safe --- blockchain transaction
   try {
+    loadingScreen.style.display = "flex";
+    const contract = getCurrentContract();
+    const tx = await contract.Fund({ value: ethers.utils.parseEther(amount.toString()) });
+
+    await tx.wait(); //  Here Waiting  for Ethereum confirmation
+    loadingScreen.style.display = "none";
+    load.innerHTML = `Transaction Successful: ${tx.hash}`;
+
+    //  saving  to Firebase After ETH success
+    const donationData = {
+      userId: user.uid,
+      userName: user.displayName || "Anonymous",
+      ngoName: selectedNGO.name,
+      amount: amount,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
     await db.collection("donations").add(donationData);
     showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
     closeModal();
-    fetchAndRenderUserDonations(); // Update donation list
-  } catch (error) {
-    console.error("Donation save failed:", error);
-    showToast("❌ Donation could not be saved.");
+    fetchAndRenderUserDonations();
+
+  } catch (err) {
+    loadingScreen.style.display = "none";
+    console.error("Blockchain donation failed:", err);
+    showToast("❌ Ethereum transaction failed. Donation not saved.");
   }
 }
+
+
+
+
 
 confirmDonateBtn.addEventListener("click", confirmDonation);
 

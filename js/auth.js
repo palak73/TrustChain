@@ -91,18 +91,31 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const name = document.getElementById("registerName").value;
   const email = document.getElementById("registerEmail").value;
   const password = document.getElementById("registerPassword").value;
+  const ngoName = document.getElementById("ngoName")?.value || "";
   const role = document.querySelector("input[name='role']:checked").value;
 
   try {
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
 
-    await db.collection("users").doc(user.uid).set({
+    //  Set display name on Firebase Auth profile
+    await user.updateProfile({ displayName: name });
+
+    // Prepare data to store in Firestore
+    const userData = {
       name,
       email,
       role,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    };
+
+    if (role === "ngo-admin") {
+      userData.ngoName = ngoName;
+      userData.isApproved = false; // Will approve manually from Firestore
+    }
+
+    //  Save user data to Firestore
+    await db.collection("users").doc(user.uid).set(userData);
 
     showToast("🎉 Registration successful!");
     toggleAuth(false);
@@ -111,6 +124,7 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     showToast("⚠️ " + error.message);
   }
 });
+
 
 
 
