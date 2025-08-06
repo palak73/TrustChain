@@ -24,11 +24,11 @@
     <div class="navbar-list">
       <div class="navbar-brand">TrustChain</div>
       <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#ngos">NGOs</a></li>
-        <li><a href="#donor">Donor</a></li>
-        <li><a href="#dashboard">NGO Dashboard</a></li>
-        <li><a href="#adminPanel" onclick="showAdminPanel()">Admin</a></li>
+        <li><a href="#" onclick = "showSection('homeSection')">Home</a></li>
+        <li><a href="#" onclick = "showSection('ngos')">NGOs</a></li>
+        <li><a href="#" onclick = "showSection('donor')">Donor</a></li>
+        <li><a href="#" onclick = "showSection('dashboard')">NGO Dashboard</a></li>
+        <li><a href="#" onclick = "showSection('adminPanel')">Admin</a></li>
         <li><button onclick="toggleAuth(true)">Login</button></li>
         <li><button id="connectWallet" class="wallet-button">Connect Wallet</button></li>
         <li id="userDisplay" class="user-info" style="color:rgb(5, 4, 4); font-weight:500;"></li>
@@ -41,7 +41,7 @@
   </nav>
 </header>
 
-
+<section class="section" id="homeSection">
   <!-- SWIPE BACKGROUND HERO SECTION -->
   <div class="slider-container">
     <div class="slide-bg" id="bg1"></div>
@@ -52,8 +52,9 @@
       <p class="hero-quote">"Transparency is the foundation of trust — let's build it together."</p>
     </section>
   </div>
+  </section>
   <!-- NGOs Section -->
-  <section id="ngos" class="section ngos-section" style="height: 700px; overflow-y: auto;">
+  <section id="ngos" class="section ngos-section" style="height: 700px; overflow-y: auto  ,display none">
     <div class="container">
       <div class="section-title">
         <h2 class="text-center">Our Partner NGOs</h2>
@@ -95,7 +96,7 @@
 
 
   <!-- DONOR SECTION -->
-  <section id="donor" class="donor-section">
+  <section id="donor" class="section donor-section style="display: none;">
   <h2 class="section-heading">Welcome Donor 👋</h2>
   <p class="donor-intro">Support your favorite NGOs. Track your donations and make a difference.</p>
 
@@ -120,7 +121,7 @@
 
 <!-- Admin -->
 
-<section id="adminPanel" class="section hidden">
+<section id="adminPanel" class="section hidden style="display: none;">
   <div class="admin-container">
     <h2 class="admin-heading">Your Admin Dashboard</h2>
 
@@ -231,6 +232,22 @@
     }
   });
 });
+
+
+  function showSection(id) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(section => {
+      section.style.display = 'none';
+    });
+
+    // Show selected section
+    const sectionToShow = document.getElementById(id);
+    sectionToShow.style.display = 'block';
+
+    // Scroll to it
+    sectionToShow.scrollIntoView({ behavior: 'smooth' });
+  }
+
 </script>
 
  

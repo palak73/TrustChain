@@ -466,6 +466,9 @@ async function fetchAllDonationsForAdmin() {
 }
 
 
+// Admin
+
+
 window.showAdminPanel = function () {
   const adminPanel = document.getElementById("adminPanel");
   if (!adminPanel) return;
@@ -489,7 +492,7 @@ async function showAdminPanel() {
   const userDoc = await db.collection("users").doc(user.uid).get();
   const userData = userDoc.data();
 
-  if (userData.role !== "admin") {
+  if (userData.role !== "ngo-admin") {
     showToast("⛔ Access denied. Not an admin.");
     return;
   }
@@ -575,4 +578,20 @@ function renderDonationChart(data) {
       },
     },
   });
+}
+
+
+
+
+
+
+function showSection(sectionId) {
+  document.querySelectorAll("section").forEach((section) => {
+    section.classList.add("hidden");
+  });
+
+  const activeSection = document.getElementById(sectionId);
+  if (activeSection) {
+    activeSection.classList.remove("hidden");
+  }
 }

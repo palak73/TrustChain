@@ -279,7 +279,7 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("donor")?.classList.remove("hidden"); // Always visible anyway
       document.getElementById("ngos")?.classList.remove("hidden");
 
-      if (role === "admin") {
+      if (role === "ngo-admin") {
         document.getElementById("adminPanel")?.classList.remove("hidden");
         document.getElementById("userWelcome").innerText = `👤 Admin: ${userData.name}`;
       } else {
@@ -310,7 +310,7 @@ auth.onAuthStateChanged(async (user) => {
       const role = doc.data()?.role;
 
       // Show admin panel only for admin
-      if (adminEl) adminEl.style.display = role === "admin" ? "block" : "none";
+      if (adminEl) adminEl.style.display = (role === "ngo-admin" && doc.data()?.status === "approved") ? "block" : "none";
 
     } catch (err) {
       console.error("🔥 Error fetching user role:", err);
