@@ -197,7 +197,7 @@ body {
 .section-title h2 {
   font-size: 2.2rem;
   margin-bottom: 10px;
-  color: #28a745;
+  color: #0b5ed7;
 }
 
 .section-title p {
@@ -235,7 +235,7 @@ body {
 .ngo-card .btn {
   margin-top: 15px;
   padding: 10px 20px;
-  background-color: #28a745;
+  background-color: #4e91ff;
   border: none;
   border-radius: 20px;
   color: white;
@@ -245,7 +245,7 @@ body {
 }
 
 .ngo-card .btn:hover {
-  background-color: #218838;
+  background-color: #4e91ff;
 }
 
 
@@ -334,14 +334,14 @@ body {
 }
 
 .modal-content input:focus {
-  border-color: #28a745;
+  border-color: #0b5ed7;
   outline: none;
   box-shadow: 0 0 0 2px rgba(226, 234, 228, 0.2);
 
 }
 
 .modal-content button {
-  background: linear-gradient(to right, #28a745, #218838);
+  background: linear-gradient(to right, #0b5ed7, #4e91ff);
   color: #fff;
   border: none;
   padding: 12px 28px;
@@ -353,7 +353,7 @@ body {
 }
 
 .modal-content button:hover {
-  background: linear-gradient(to right, #218838, #1e7e34);
+  background: linear-gradient(to right, #0b5ed7, #4e91ff);
 }
 
 .close-button {
@@ -447,13 +447,13 @@ body {
 footer {
   height: 35px;
   text-align: center;
-  background-color: #218838;
+  background-color: #0b5ed7;
   border-radius: 5px;
 }
 
 .donor-heading {
   font-size: 2.2rem;
-  color: #218838;
+  color: #0b5ed7;
   font-family: 'Times New Roman', Times, serif;
 }
 
@@ -464,8 +464,9 @@ input {
   margin: 10px -10px;
   font-size: 1rem;
   padding-right: 20px;
-  box-shadow: 1px 4px 15px rgba(170, 231, 167, 0.8);
+  box-shadow: 1px 4px 10px #89b8fe;
 }
+
 
 
 button {
@@ -473,7 +474,7 @@ button {
   margin: 10px;
   font-size: 1em;
   cursor: pointer;
-  background-color: #4CAF50;
+  background-color: #4e91ff;
   color: white;
   border: none;
   border-radius: 8px;
@@ -520,7 +521,7 @@ button {
 .donation-form button {
   width: 100%;
   padding: 12px;
-  background-color: #4CAF50;
+  background-color: #4e91ff;
   color: white;
   font-size: 1rem;
   border: none;
@@ -530,7 +531,7 @@ button {
 }
 
 .donation-form button:hover {
-  background-color: #388e3c;
+  background-color: #4e91ff;
 }
 
 #donateModal {
@@ -552,7 +553,7 @@ button {
   top: 20px;
   right: 20px;
   padding: 10px 20px;
-  background: #4CAF50;
+  background: #4e91ff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -561,7 +562,7 @@ button {
 }
 
 .wallet-btn:hover {
-  background: #45a049;
+  background: #0b5ed7;
 }
 
 .donation-select {
@@ -590,7 +591,7 @@ button {
 
 .donation-select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #0b5ed7;
   box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
 }
 
@@ -604,7 +605,7 @@ button {
   position: fixed;
   bottom: 30px;
   right: 30px;
-  background: linear-gradient(135deg, #28a745, #218838);
+  background: linear-gradient(135deg, #0b5ed7, #4e91ff);
   color: white;
   padding: 16px 24px;
   border-radius: 10px;
@@ -638,7 +639,7 @@ button {
 .input-button-wrapper .check-button {
   padding: 12px 20px;
   border-radius: 30px;
-  background: linear-gradient(to right, #28a745, #218838);
+  background: linear-gradient(to right, #0b5ed7, #4e91ff);
   color: #fff;
   font-weight: bold;
   border: none;
@@ -647,7 +648,7 @@ button {
 }
 
 .input-button-wrapper .check-button:hover {
-  background: #1e7e34;
+  background: #0b5ed7;
 }
 
 #loading-screen {
@@ -668,7 +669,7 @@ button {
 
 .spinner {
   border: 5px solid #ccc;
-  border-top: 5px solid #28a745;
+  border-top: 5px solid #0b5ed7;
   border-radius: 50%;
   width: 50px;
   height: 50px;
@@ -802,7 +803,7 @@ input {
 button {
   margin-top: 1rem;
   padding: 10px 20px;
-  background: #28a745;
+  background: #007bff;
   border: none;
   color: white;
   font-weight: bold;
@@ -879,7 +880,7 @@ button {
 }
 
 .auth-tabs button.active {
-  background-color: #10b981;
+  background-color: #007bff;
   color: white;
   border-radius: 6px;
 }
@@ -906,7 +907,7 @@ button {
 
 .auth-form button {
   padding: 12px;
-  background-color: #10b981;
+  background-color: #007bff;
   border: none;
   color: white;
   border-radius: 6px;
@@ -916,7 +917,7 @@ button {
 }
 
 .auth-form button:hover {
-  background-color: #0e9f6e;
+  background-color: #0b5ed7;
 }
 
 /* Radio toggle section */
@@ -933,17 +934,17 @@ button {
   font-weight: 500;
   cursor: pointer;
   padding: 8px 14px;
-  border: 1px solid #10b981;
+  border: 1px solid #0b5ed7;
   border-radius: 6px;
   transition: background 0.3s, color 0.3s;
 }
 
 .role-option input {
-  accent-color: #10b981;
+  accent-color: #0b5ed7;
 }
 
 .role-option:hover {
-  background: #10b981;
+  background: #0b5ed7;
   color: white;
 }
 
@@ -961,7 +962,7 @@ button {
 }
 
 .toggle-message a {
-  color: #10b981;
+  color: #0b5ed7;
   font-weight: 600;
   text-decoration: none;
 }
@@ -1017,7 +1018,7 @@ button {
 
 .donation-amount {
   font-weight: bold;
-  color: #28a745;
+  color: #007bff;
   font-size: 1rem;
 }
 
@@ -1074,7 +1075,7 @@ button {
 .analytics-section {
   margin-top: 40px;
   padding: 20px;
-  border: 2px solid #00a87e;
+  border: 2px solid #0c81fe;
   border-radius: 10px;
   background-color: #ecfff9;
 }

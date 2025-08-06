@@ -100,12 +100,12 @@
   <p class="donor-intro">Support your favorite NGOs. Track your donations and make a difference.</p>
 
   <div class="donation-form">
-    <input type="text" id="donorName" placeholder="Your Name" required>
-    <input type="email" id="donorEmail" placeholder="Your Email" required>
-    <select id="mySelect" class="donation-select">
+    <input class="donation-entries" type="text" id="donorName" placeholder="Your Name" required>
+    <input class="donation-entries" type="email" id="donorEmail" placeholder="Your Email" required>
+    <select id="mySelect" class="donation-select donation-entries">
       <option value="">-- Please choose an NGO --</option>
     </select>
-    <input type="number" id="donorAmount" placeholder="Donation Amount (₹)" required>
+    <input class="donation-entries" type="number" id="donorAmount" placeholder="Donation Amount (₹)" required>
     <button onclick="submitDonation()">Donate Now</button>
   </div>
 
