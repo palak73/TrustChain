@@ -581,13 +581,13 @@ function renderDonationChart(data) {
 
 
 
-function showSection(sectionId) {
-  document.querySelectorAll("section").forEach((section) => {
-    section.classList.add("hidden");
-  });
+// function showSection(sectionId) {
+//   document.querySelectorAll("section").forEach((section) => {
+//     section.classList.add("hidden");
+//   });
 
-  const activeSection = document.getElementById(sectionId);
-  if (activeSection) {
-    activeSection.classList.remove("hidden");
-  }
-}
+//   const activeSection = document.getElementById(sectionId);
+//   if (activeSection) {
+//     activeSection.classList.remove("hidden");
+//   }
+// }

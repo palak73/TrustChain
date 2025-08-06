@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 
 
   <link
@@ -26,11 +24,11 @@
     <div class="navbar-list">
       <div class="navbar-brand">TrustChain</div>
       <ul class="nav-links">
-        <li><a href="#" onclick = "showSection('homeSection')">Home</a></li>
-        <li><a href="#" onclick = "showSection('ngos')">NGOs</a></li>
-        <li><a href="#" onclick = "showSection('donor')">Donor</a></li>
-        <li><a href="#" onclick = "showSection('dashboard')">NGO Dashboard</a></li>
-        <li><a href="#" onclick = "showSection('adminPanel')">Admin</a></li>
+        <li><a href="#home" ></a>Home</a></li>
+        <li><a href="#ngos" onclick = "showSection('ngos')">NGOs</a></li>
+        <li><a href="#donor">Donor</a></li>
+        <li><a href="#dashboard">NGO Dashboard</a></li>
+        <li><a href="#adminPanel">Admin</a></li>
         <li><button onclick="toggleAuth(true)">Login</button></li>
         <li><button id="connectWallet" class="wallet-button">Connect Wallet</button></li>
         <li id="userDisplay" class="user-info" style="color:rgb(5, 4, 4); font-weight:500;"></li>
@@ -56,7 +54,7 @@
   </div>
   </section>
   <!-- NGOs Section -->
-  <section id="ngos" class="section ngos-section" style="height: 700px; overflow-y: auto  ,display none">
+  <section id="ngos" class="section ngos-section" style="height: 700px; overflow-y: auto;">
     <div class="container">
       <div class="section-title">
         <h2 class="text-center">Our Partner NGOs</h2>
@@ -98,7 +96,7 @@
 
 
   <!-- DONOR SECTION -->
-  <section id="donor" class="section donor-section style="display: none;">
+  <section id="donor" class="section donor-section ">
   <h2 class="section-heading">Welcome Donor 👋</h2>
   <p class="donor-intro">Support your favorite NGOs. Track your donations and make a difference.</p>
 
@@ -123,7 +121,7 @@
 
 <!-- Admin -->
 
-<section id="adminPanel" class="section hidden style="display: none;">
+<section id="adminPanel" class="section hidden">
   <div class="admin-container">
     <h2 class="admin-heading">Your Admin Dashboard</h2>
 
@@ -148,19 +146,7 @@
 
 
   <footer>
-    <div class="footer-contact">
-      <h3>Contact Info</h3>
-      <p class="contact-item">
-        <i class="fas fa-phone"></i>
-        Call or Text Us: 1234567890
-       <br>
-       <i class="fas fa-envelope"></i>
-        Email Us: trustchain12@gmail.com
-      </p>
-    </div>
-    <hr>
-    <p id="footer-rights"><strong>2025 &copy; Trust Chain. All Rights Reserved.</strong> World’s Fastest Website Developed and Maintained by the Neuronators.</p>
-
+    2025 &copy; Trust Chain. All Rights Reserved.
   </footer>
 
   
@@ -246,22 +232,6 @@
     }
   });
 });
-
-
-  function showSection(id) {
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(section => {
-      section.style.display = 'none';
-    });
-
-    // Show selected section
-    const sectionToShow = document.getElementById(id);
-    sectionToShow.style.display = 'block';
-
-    // Scroll to it
-    sectionToShow.scrollIntoView({ behavior: 'smooth' });
-  }
-
 </script>
 
  
