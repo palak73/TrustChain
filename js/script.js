@@ -290,7 +290,7 @@ async function confirmDonation() {
     }
   } catch (err) {
     console.error("ML API error:", err);
-    showToast("⚠️ Failed to verify NGO data. Donation is not saved.");
+    alert("⚠️ Failed to verify NGO data. Donation is not saved.");
     return;
   }
 
@@ -495,7 +495,7 @@ async function showAdminPanel() {
 
   if (userData.status !== "approved") {
     showToast("⏳ Admin approval pending.");
-    return;+
+    return;
   }
 
   document.getElementById("adminSection").style.display = "block";
