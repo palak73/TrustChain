@@ -338,13 +338,19 @@ auth.onAuthStateChanged(async (user) => {
 
 // After Firebase login success
 firebase.auth().onAuthStateChanged((user) => {
+ 
   if (user) {
+
     const displayName = user.displayName || user.email.split('@')[0];
     document.getElementById("userDisplay").textContent = `👤 ${displayName}`;
+   
   } else {
     document.getElementById("userDisplay").textContent = "";
   }
 });
+
+
+
 
 
 

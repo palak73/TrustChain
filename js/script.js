@@ -133,7 +133,7 @@ function renderDonationCards(donations) {
       <p class="donation-amount">₹${donation.amount}</p>
       <p><strong>Date:</strong> ${donation.date || "N/A"}</p>
       <p><strong>Method:</strong> ${donation.method || "Wallet"}</p>
-    `;
+    `
 
     container.appendChild(card);
   });
@@ -271,7 +271,7 @@ async function confirmDonation() {
     milestones: selectedMilestones
   };
 
-  let isFraud = false;
+  
 
   try {
     const response = await fetch("https://ngotracking-2.onrender.com/predict", {
@@ -374,10 +374,6 @@ function submitDonation() {
   document.getElementById("donorNGO").value = "";
   document.getElementById("donorAmount").value = "";
 }
-
-
-
-
 
 
 
@@ -564,7 +560,7 @@ function renderDonationChart(data) {
       datasets: [{
         label: "Donations Over Time",
         data,
-        borderColor: "#28a745",
+        borderColor: "#6ea8fe",
         fill: false,
       }],
     },
