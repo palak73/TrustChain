@@ -267,7 +267,7 @@ async function confirmDonation() {
   ];
 
   const payload = {
-    donation_amount: amount * 80000,
+    donation_amount: amount,
     milestones: selectedMilestones
   };
 
