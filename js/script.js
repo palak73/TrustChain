@@ -45,17 +45,30 @@ let allNGOs = [];
 let selectedNGO = null;
 
 //  Fetch NGO Data from npoint.io JSON API
-fetch("https://api.npoint.io/17036fa7f997e9f9e28b")
-  .then(res => res.json())
+// fetch("https://api.npoint.io/17036fa7f997e9f9e28b")
+//   .then(res => res.json())
+//   .then(data => {
+//     allNGOs = data;
+//     renderNGOCards(allNGOs);
+//     console.log(data);
+//   })
+//   .catch((err) => {
+//     console.error("Failed to load NGOs:", err);
+//   });
+  
+
+
+fetch('Assets/ngos_real_data.json')
+  .then(response => response.json())
   .then(data => {
     allNGOs = data;
     renderNGOCards(allNGOs);
-    console.log(data);
   })
-  .catch((err) => {
-    console.error("Failed to load NGOs:", err);
-  });
-  
+  .catch(error => console.error("Error loading NGOs:", error));
+
+
+
+
 
 // DOM References
 const ngoContainer = document.getElementById("ngoCards");
@@ -607,3 +620,57 @@ function renderDonationChart(data) {
 //   }
 // }
 
+
+
+
+// Triggerring  modal after admin chooses role
+// document.getElementById("registerBtn").addEventListener("click", function () {
+//   const role = document.getElementById("role").value;
+//   if (role === "admin") {
+//     document.getElementById("fundraiserModal").classList.remove("hidden");
+//   }
+// });
+
+// async function saveFundraiserDetails() {
+//   const userId = auth.currentUser.uid;
+//   const fundraiserName = document.getElementById("fundraiserName").value;
+//   const causeDescription = document.getElementById("causeDescription").value;
+//   const targetAmount = parseInt(document.getElementById("targetAmount").value);
+//   const deadline = document.getElementById("deadline").value;
+
+//   // File upload logic for documents
+//   const docs = document.getElementById("documents").files;
+//   const docURLs = [];
+//   for (let file of docs) {
+//     const storageRef = ref(storage, `documents/${userId}/${file.name}`);
+//     await uploadBytes(storageRef, file);
+//     const url = await getDownloadURL(storageRef);
+//     docURLs.push(url);
+//   }
+
+//   await addDoc(collection(db, "fundraisers"), {
+//     userId,
+//     fundraiserName,
+//     causeDescription,
+//     targetAmount,
+//     deadline,
+//     documents: docURLs,
+//     status: "pending",
+//     type: "individual",
+//     createdAt: new Date()
+//   });
+
+//   showToast("Your fundraiser request has been submitted for verification.");
+//   document.getElementById("fundraiserModal").classList.add("hidden");
+// }
+
+
+// async function loadFundraisers() {
+//   const q = query(collection(db, "fundraisers"), where("status", "==", "approved"));
+//   const snapshot = await getDocs(q);
+//   snapshot.forEach(doc => {
+//     const data = doc.data();
+//     // Create a card with fundraiserName, causeDescription, targetAmount, deadline
+//     // Add to NGO section
+//   });
+// }

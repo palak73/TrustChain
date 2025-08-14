@@ -86,6 +86,46 @@ function showToast(message) {
 }
 
 
+// document.getElementById("registerForm").addEventListener("submit", async (e) => {
+//   e.preventDefault();
+//   const name = document.getElementById("registerName").value;
+//   const email = document.getElementById("registerEmail").value;
+//   const password = document.getElementById("registerPassword").value;
+//   const ngoName = document.getElementById("ngoName")?.value || "";
+//   const role = document.querySelector("input[name='role']:checked").value;
+
+//   try {
+//     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+//     const user = userCredential.user;
+
+//     //  Set display name on Firebase Auth profile
+//     await user.updateProfile({ displayName: name });
+
+//     // Prepare data to store in Firestore
+//     const userData = {
+//       name,
+//       email,
+//       role,
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     };
+
+//     if (role === "ngo-admin") {
+//       userData.ngoName = ngoName;
+//       userData.isApproved = false; // Will approve manually from Firestore
+//     }
+
+//     //  Save user data to Firestore
+//     await db.collection("users").doc(user.uid).set(userData);
+
+//     showToast("🎉 Registration successful!");
+//     toggleAuth(false);
+//   } catch (error) {
+//     console.error(error.message);
+//     showToast("⚠️ " + error.message);
+//   }
+// });
+
+
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = document.getElementById("registerName").value;
@@ -98,23 +138,27 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
 
-    //  Set display name on Firebase Auth profile
+    // Set display name on Firebase Auth profile
     await user.updateProfile({ displayName: name });
+
+    // Determine default status
+    let defaultStatus = role === "ngo-admin" ? "pending" : "approved";
 
     // Prepare data to store in Firestore
     const userData = {
       name,
       email,
       role,
+      status: defaultStatus, // ✅ new status field
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     if (role === "ngo-admin") {
       userData.ngoName = ngoName;
-      userData.isApproved = false; // Will approve manually from Firestore
+      userData.isApproved = false; // You can remove this if using only 'status'
     }
 
-    //  Save user data to Firestore
+    // Save user data to Firestore
     await db.collection("users").doc(user.uid).set(userData);
 
     showToast("🎉 Registration successful!");
@@ -234,6 +278,76 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
 
 
+// window.addEventListener("DOMContentLoaded", () => {
+//   document.getElementById("loginForm").addEventListener("submit", async (e) => {
+//     e.preventDefault();
+
+//     const email = document.getElementById("loginEmail").value;
+//     const password = document.getElementById("loginPassword").value;
+
+//     try {
+//       // Sign in with Firebase Auth
+//       const userCredential = await auth.signInWithEmailAndPassword(email, password);
+//       const user = userCredential.user;
+
+//       // Fetch user document from Firestore
+//       const docRef = db.collection("users").doc(user.uid);
+//       const doc = await docRef.get();
+
+//       if (!doc.exists) {
+//         //showToast("⚠️ User data not found in Firestore.");
+//         return;
+//       }
+
+//       const userData = doc.data();
+//       const role = userData.role;
+
+//       // Welcome message
+//       showToast(`👋 Welcome back, ${userData.name} (${role})`);
+
+//       // Hide auth modal
+//       toggleAuth(false);
+
+//       // Show logout button
+//       document.getElementById("logoutBtn")?.classList.remove("hidden");
+
+//       // Display name in navbar
+//       const welcome = document.getElementById("userWelcome");
+//       if (welcome) {
+//         welcome.innerText = role === "admin"
+//           ? `👤 Admin: ${userData.name}`
+//           : `👤 ${userData.name}`;
+//       }
+
+//       // Show sections based on role
+//       document.getElementById("donor")?.classList.remove("hidden"); // Always visible anyway
+//       document.getElementById("ngos")?.classList.remove("hidden");
+
+//       if (role === "ngo-admin") {
+//         document.getElementById("adminPanel")?.classList.remove("hidden");
+//         document.getElementById("userWelcome").innerText = `👤 Admin: ${userData.name}`;
+//       } else {
+//         document.getElementById("adminPanel")?.classList.add("hidden");
+//         document.getElementById("userWelcome").innerText = `👤 ${userData.name}`;
+//       }
+
+//       // Render user donation history
+//       fetchAndRenderUserDonations();
+
+//       // Optional: Set name in navbar
+//       const navName = document.getElementById("navUsername");
+//       if (navName) navName.textContent = userData.name;
+
+//     } catch (error) {
+//       console.error("Login Error:", error.message);
+//       //showToast("⚠️ " + error.message);
+//     }
+//   });
+// });
+
+
+
+
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("loginForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -251,12 +365,21 @@ window.addEventListener("DOMContentLoaded", () => {
       const doc = await docRef.get();
 
       if (!doc.exists) {
-        //showToast("⚠️ User data not found in Firestore.");
+        showToast("⚠️ User data not found in Firestore.");
         return;
       }
 
       const userData = doc.data();
       const role = userData.role;
+
+      // ✅ Check status for NGO admins
+      if (role === "ngo-admin" && userData.status === "pending") {
+        showToast("⏳ Admin approval pending. Please wait.");
+        // Hide admin panel if visible
+        document.getElementById("adminPanel")?.classList.add("hidden");
+      } else if (role === "ngo-admin" && userData.status === "approved") {
+        document.getElementById("adminPanel")?.classList.remove("hidden");
+      }
 
       // Welcome message
       showToast(`👋 Welcome back, ${userData.name} (${role})`);
@@ -270,36 +393,28 @@ window.addEventListener("DOMContentLoaded", () => {
       // Display name in navbar
       const welcome = document.getElementById("userWelcome");
       if (welcome) {
-        welcome.innerText = role === "admin"
+        welcome.innerText = role === "ngo-admin"
           ? `👤 Admin: ${userData.name}`
           : `👤 ${userData.name}`;
       }
 
       // Show sections based on role
-      document.getElementById("donor")?.classList.remove("hidden"); // Always visible anyway
+      document.getElementById("donor")?.classList.remove("hidden");
       document.getElementById("ngos")?.classList.remove("hidden");
-
-      if (role === "ngo-admin") {
-        document.getElementById("adminPanel")?.classList.remove("hidden");
-        document.getElementById("userWelcome").innerText = `👤 Admin: ${userData.name}`;
-      } else {
-        document.getElementById("adminPanel")?.classList.add("hidden");
-        document.getElementById("userWelcome").innerText = `👤 ${userData.name}`;
-      }
 
       // Render user donation history
       fetchAndRenderUserDonations();
 
-      // Optional: Set name in navbar
-      const navName = document.getElementById("navUsername");
-      if (navName) navName.textContent = userData.name;
-
     } catch (error) {
       console.error("Login Error:", error.message);
-      //showToast("⚠️ " + error.message);
+      showToast("⚠️ " + error.message);
     }
   });
 });
+
+
+
+
 
 auth.onAuthStateChanged(async (user) => {
   const adminEl = document.getElementById("adminPanel"); 
@@ -626,3 +741,57 @@ window.logout = async function () {
 //     showToast("❌ Logout failed");
 //   }
 // };
+
+
+
+// Trigerring fundraiser model after admin role
+// document.getElementById("registerBtn").addEventListener("click", function () {
+//   const role = document.getElementById("role").value;
+//   if (role === "admin") {
+//     document.getElementById("fundraiserModal").classList.remove("hidden");
+//   }
+// });
+
+// async function saveFundraiserDetails() {
+//   const userId = auth.currentUser.uid;
+//   const fundraiserName = document.getElementById("fundraiserName").value;
+//   const causeDescription = document.getElementById("causeDescription").value;
+//   const targetAmount = parseInt(document.getElementById("targetAmount").value);
+//   const deadline = document.getElementById("deadline").value;
+
+//   // File upload logic for documents
+//   const docs = document.getElementById("documents").files;
+//   const docURLs = [];
+//   for (let file of docs) {
+//     const storageRef = ref(storage, `documents/${userId}/${file.name}`);
+//     await uploadBytes(storageRef, file);
+//     const url = await getDownloadURL(storageRef);
+//     docURLs.push(url);
+//   }
+
+//   await addDoc(collection(db, "fundraisers"), {
+//     userId,
+//     fundraiserName,
+//     causeDescription,
+//     targetAmount,
+//     deadline,
+//     documents: docURLs,
+//     status: "pending",
+//     type: "individual",
+//     createdAt: new Date()
+//   });
+
+//   showToast("Your fundraiser request has been submitted for verification.");
+//   document.getElementById("fundraiserModal").classList.add("hidden");
+// }
+
+
+// async function loadFundraisers() {
+//   const q = query(collection(db, "fundraisers"), where("status", "==", "approved"));
+//   const snapshot = await getDocs(q);
+//   snapshot.forEach(doc => {
+//     const data = doc.data();
+//     // Create a card with fundraiserName, causeDescription, targetAmount, deadline
+//     // Add to NGO section
+//   });
+// }
