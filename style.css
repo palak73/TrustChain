@@ -501,8 +501,8 @@ button {
   margin: 10px;
   font-size: 1em;
   cursor: pointer;
-  background-color: #4e91ff;
-  color: white;
+  background-color:#5898ff ;
+  color: whitesmoke;
   border: none;
   border-radius: 8px;
 }
@@ -510,8 +510,8 @@ button {
 
 
 .donor-section {
-  padding: 50px 20px;
-  background-color: rgba(162, 213, 198, 0.8);
+  padding: 50px 50px;
+  background-color: #5898ff;
   margin: 50px auto;
   max-width: 800px;
   border-radius: 12px;
@@ -537,7 +537,7 @@ button {
 }
 
 .donation-form input {
-  width: 100%;
+  width: 97%;
   padding: 12px;
   margin-bottom: 12px;
   border-radius: 8px;
@@ -546,10 +546,10 @@ button {
 }
 
 .donation-form button {
-  width: 100%;
+  width: 97%;
   padding: 12px;
-  background-color: #4e91ff;
-  color: white;
+  background-color: whitesmoke;
+  color: rgb(25, 21, 21);
   font-size: 1rem;
   border: none;
   border-radius: 8px;
@@ -558,7 +558,8 @@ button {
 }
 
 .donation-form button:hover {
-  background-color: #4e91ff;
+  padding: 14px;
+  font-size: 1.1rem;
 }
 
 #donateModal {
