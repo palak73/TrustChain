@@ -206,29 +206,22 @@
   </div>
 </div>
 
-<!-- FundRaising popup for admin
 
-<div id="fundraiserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
-  <div class="bg-white p-6 rounded-2xl w-full max-w-lg shadow-lg">
-    <h2 class="text-2xl font-bold mb-4 text-gray-800">Fundraiser Details</h2>
-    
-    <input type="text" id="fundraiserName" placeholder="Fundraiser / NGO Name" class="w-full mb-3 p-2 border rounded-lg">
-    
-    <textarea id="causeDescription" placeholder="Describe the cause..." class="w-full mb-3 p-2 border rounded-lg"></textarea>
-    
-    <input type="number" id="targetAmount" placeholder="Target Amount (₹)" class="w-full mb-3 p-2 border rounded-lg">
-    
-    <input type="date" id="deadline" class="w-full mb-3 p-2 border rounded-lg">
-    
-    <label class="block mb-2 font-semibold">Upload Supporting Documents:</label>
-    <input type="file" id="documents" multiple class="w-full mb-3">
-    
-    <button onclick="saveFundraiserDetails()" class="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700">
-      Submit for Verification
-    </button>
+
+<div id="ngoDetailsModal" class="modal hidden">
+  <div class="modal-content">
+    <span class="close-button" onclick="closeNGOModal()">&times;</span>
+    <h2>Register Your Cause</h2>
+    <p>Please provide details for your NGO or Social Cause</p>
+
+    <input type="number" id="ngoGoal" placeholder="Funding Goal (₹)" required>
+    <textarea id="ngoCause" placeholder="Describe your cause..." required></textarea>
+    <label>Upload Verification Documents:</label>
+    <input type="file" id="ngoDocs" multiple>
+
+    <button onclick="submitNGODetails()">Submit</button>
   </div>
-</div> -->
-
+</div>
 
 
 

@@ -1117,3 +1117,36 @@ button {
 #logoutBtn {
   display: inline-block !important; 
 }
+
+
+
+
+
+
+#ngoDetailsModal .modal-content {
+  max-width: 500px;
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  font-family: 'Poppins', sans-serif;
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.2);
+}
+#ngoDetailsModal input, 
+#ngoDetailsModal textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+#ngoDetailsModal button {
+  background: #00b894;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+#ngoDetailsModal button:hover {
+  background: #019875;
+}

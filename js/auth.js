@@ -126,48 +126,153 @@ function showToast(message) {
 // });
 
 
+// document.getElementById("registerForm").addEventListener("submit", async (e) => {
+//   e.preventDefault();
+//   const name = document.getElementById("registerName").value;
+//   const email = document.getElementById("registerEmail").value;
+//   const password = document.getElementById("registerPassword").value;
+//   const ngoName = document.getElementById("ngoName")?.value || "";
+//   const role = document.querySelector("input[name='role']:checked").value;
+
+//   try {
+//     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+//     const user = userCredential.user;
+
+//     // Set display name on Firebase Auth profile
+//     await user.updateProfile({ displayName: name });
+
+//     // Determine default status
+//     let defaultStatus = role === "ngo-admin" ? "pending" : "approved";
+
+//     // Prepare data to store in Firestore
+//     const userData = {
+//       name,
+//       email,
+//       role,
+//       status: defaultStatus, // ✅ new status field
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     };
+
+//     if (role === "ngo-admin") {
+//       userData.ngoName = ngoName;
+//       userData.isApproved = false; // You can remove this if using only 'status'
+//     }
+
+//     // Save user data to Firestore
+//     await db.collection("users").doc(user.uid).set(userData);
+
+//     showToast("🎉 Registration successful!");
+//     toggleAuth(false);
+//   } catch (error) {
+//     console.error(error.message);
+//     showToast("⚠️ " + error.message);
+//   }
+// });
+
+
+
+
+
+let tempUserId = null;
+let tempNGOName = null;
+
+// Registration
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
   e.preventDefault();
-  const name = document.getElementById("registerName").value;
-  const email = document.getElementById("registerEmail").value;
-  const password = document.getElementById("registerPassword").value;
-  const ngoName = document.getElementById("ngoName")?.value || "";
+
+  const name = document.getElementById("registerName").value.trim();
+  const email = document.getElementById("registerEmail").value.trim();
+  const password = document.getElementById("registerPassword").value.trim();
+  const ngoName = document.getElementById("ngoName")?.value.trim() || "";
   const role = document.querySelector("input[name='role']:checked").value;
 
   try {
     const userCredential = await auth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
-
-    // Set display name on Firebase Auth profile
     await user.updateProfile({ displayName: name });
 
-    // Determine default status
     let defaultStatus = role === "ngo-admin" ? "pending" : "approved";
 
-    // Prepare data to store in Firestore
+    // Save in users collection
     const userData = {
       name,
       email,
       role,
-      status: defaultStatus, // ✅ new status field
+      status: defaultStatus,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     };
 
     if (role === "ngo-admin") {
       userData.ngoName = ngoName;
-      userData.isApproved = false; // You can remove this if using only 'status'
+      tempUserId = user.uid;
+      tempNGOName = ngoName;
     }
 
-    // Save user data to Firestore
     await db.collection("users").doc(user.uid).set(userData);
 
-    showToast("🎉 Registration successful!");
-    toggleAuth(false);
+    if (role === "ngo-admin") {
+      openNGOModal(); // Show second form
+    } else {
+      showToast("🎉 Registration successful!");
+      toggleAuth(false);
+    }
+
   } catch (error) {
     console.error(error.message);
     showToast("⚠️ " + error.message);
   }
 });
+
+// Open Modal
+function openNGOModal() {
+  document.getElementById("ngoDetailsModal").classList.remove("hidden");
+}
+
+// Close Modal
+function closeNGOModal() {
+  document.getElementById("ngoDetailsModal").classList.add("hidden");
+}
+
+// Submit NGO Details
+async function submitNGODetails() {
+  const goal = document.getElementById("ngoGoal").value.trim();
+  const cause = document.getElementById("ngoCause").value.trim();
+  const files = document.getElementById("ngoDocs").files;
+
+  if (!goal || !cause) {
+    showToast("⚠️ Please fill all fields.");
+    return;
+  }
+
+  try {
+    let uploadedDocs = [];
+
+    for (let file of files) {
+      const storageRef = firebase.storage().ref(`ngoDocs/${tempUserId}/${file.name}`);
+      await storageRef.put(file);
+      const url = await storageRef.getDownloadURL();
+      uploadedDocs.push(url);
+    }
+
+    await db.collection("ngoRequests").add({
+      name: tempNGOName,
+      goal: parseInt(goal),
+      cause,
+      docs: uploadedDocs,
+      createdBy: tempUserId,
+      status: "pending",
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    closeNGOModal();
+    showToast("✅ NGO request submitted. Wait for verification.");
+    toggleAuth(false);
+
+  } catch (error) {
+    console.error(error.message);
+    showToast("⚠️ " + error.message);
+  }
+}
 
 
 

@@ -44,19 +44,6 @@ setInterval(swapImages, 5000);
 let allNGOs = [];
 let selectedNGO = null;
 
-//  Fetch NGO Data from npoint.io JSON API
-// fetch("https://api.npoint.io/17036fa7f997e9f9e28b")
-//   .then(res => res.json())
-//   .then(data => {
-//     allNGOs = data;
-//     renderNGOCards(allNGOs);
-//     console.log(data);
-//   })
-//   .catch((err) => {
-//     console.error("Failed to load NGOs:", err);
-//   });
-  
-
 
 fetch('Assets/ngos_real_data.json')
   .then(response => response.json())
