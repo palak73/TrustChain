@@ -25,14 +25,14 @@ conv.innerHTML = `1 ETH = ₹${data.ethereum.inr}`;
 
 
 function showToast(message) {
-  const toast = document.getElementById("toast");
-  const toastText = document.getElementById("toast-text");
-  toastText.textContent = message;
-  toast.classList.add("show");
+    const toast = document.getElementById("toast");
+    const toastText = document.getElementById("toast-text");
+    toastText.textContent = message;
+    toast.classList.add("show");
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
+    setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
 }
 
 
@@ -59,7 +59,7 @@ connectbtn.addEventListener('click', async () => {
     }
     catch (error) {
         if (error.code == 4001) {
-           showToast("User Denied access");
+            showToast("User Denied access");
             console.error("User Denied access");
         }
     }
@@ -100,9 +100,20 @@ EthSend.addEventListener('click', async () => {
 
 
         await tx.wait();
+        // try {
+        //     await db.collection("donations").add(donationData);
+        //     showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+        //     closeModal();
+        //     fetchAndRenderUserDonations(); // Update donation list
+        // } catch (error) {
+        //     console.error("Donation save failed:", error);
+        //     showToast("❌ Donation could not be saved.");
+        // }
         loadingScreen.style.display = "none";
 
-        load.innerHTML = `Transaction Successful ${tx.hash}`;
+        // load.innerHTML = `Transaction Successful ${tx.hash}`;
+        load.innerHTML = `✅ Transaction Successful: <a href="https://sepolia.etherscan.io/tx/${tx.hash}" target="_blank" style="color: #4CAF50; text-decoration: underline;">View on Etherscan</a>`;
+
 
     }
     catch (err) {
