@@ -234,6 +234,110 @@ function closeNGOModal() {
 }
 
 // Submit NGO Details
+// async function submitNGODetails() {
+//   const goal = document.getElementById("ngoGoal").value.trim();
+//   const cause = document.getElementById("ngoCause").value.trim();
+//   const files = document.getElementById("ngoDocs").files;
+
+//   if (!goal || !cause) {
+//     showToast("⚠️ Please fill all fields.");
+//     return;
+//   }
+
+//   try {
+//     let uploadedDocs = [];
+
+//     for (let file of files) {
+//       const storageRef = firebase.storage().ref(`ngoDocs/${tempUserId}/${file.name}`);
+//       await storageRef.put(file);
+//       const url = await storageRef.getDownloadURL();
+//       uploadedDocs.push(url);
+//     }
+
+//     await db.collection("ngoRequests").add({
+//       name: tempNGOName,
+//       goal: parseInt(goal),
+//       cause,
+//       docs: uploadedDocs,
+//       createdBy: tempUserId,
+//       status: "pending",
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     });
+
+//     closeNGOModal();
+//     showToast("✅ NGO request submitted. Wait for verification.");
+//     toggleAuth(false);
+
+//   } catch (error) {
+//     console.error(error.message);
+//     showToast("⚠️ " + error.message);
+//   }
+// }
+
+
+
+// NGO Details Submit
+// async function submitNGODetails() {
+//   const goal = document.getElementById("ngoGoal").value.trim();
+//   const cause = document.getElementById("ngoCause").value.trim();
+//   const files = document.getElementById("ngoDocs").files;
+
+//   if (!goal || !cause) {
+//     showToast("⚠️ Please fill all fields.");
+//     return;
+//   }
+
+//   try {
+//     // Uploading docs
+//     let uploadedDocs = [];
+//     for (let file of files) {
+//       const storageRef = firebase.storage().ref(`ngoDocs/${tempUserId}/${file.name}`);
+//       await storageRef.put(file);
+//       const url = await storageRef.getDownloadURL();
+//       uploadedDocs.push(url);
+//     }
+
+//     // NGO Admin Wallet Address (Metamask)
+//     let walletAddress = null;
+//     if (window.ethereum) {
+//       const provider = new ethers.providers.Web3Provider(window.ethereum);
+//       const signer = provider.getSigner();
+//       walletAddress = await signer.getAddress();
+//     } else {
+//       showToast("⚠️ Please connect MetaMask first.");
+//       return;
+//     }
+
+//     // Deploy Smart Contract
+  
+//     // const contractAddress = await deployContract(goal, cause);
+//     const contractAddress = await deployContract(goal, cause); 
+
+//     // Save in Firestore (ngoRequests)
+//     await db.collection("ngoRequests").add({
+//       name: tempNGOName,
+//       goal: parseInt(goal),
+//       cause,
+//       docs: uploadedDocs,
+//       createdBy: tempUserId,
+//       walletAddress: walletAddress,   // NGO wallet
+//       contractAddress: contractAddress, // Unique contract
+//       status: "pending",
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     });
+
+//     closeNGOModal();
+//     showToast("✅ NGO request submitted. Wait for verification.");
+//     toggleAuth(false);
+
+//   } catch (error) {
+//     console.error(error.message);
+//     showToast("⚠️ " + error.message);
+//   }
+// }
+
+
+
 async function submitNGODetails() {
   const goal = document.getElementById("ngoGoal").value.trim();
   const cause = document.getElementById("ngoCause").value.trim();
@@ -246,7 +350,6 @@ async function submitNGODetails() {
 
   try {
     let uploadedDocs = [];
-
     for (let file of files) {
       const storageRef = firebase.storage().ref(`ngoDocs/${tempUserId}/${file.name}`);
       await storageRef.put(file);
@@ -254,18 +357,27 @@ async function submitNGODetails() {
       uploadedDocs.push(url);
     }
 
+    // contract address from blockchain
+    const contractAddress = await ;
+
+    //  Get wallet address from user document
+    const userDoc = await db.collection("users").doc(tempUserId).get();
+    const walletAddress = userDoc.exists ? userDoc.data().walletAddress : null;
+
     await db.collection("ngoRequests").add({
       name: tempNGOName,
       goal: parseInt(goal),
       cause,
       docs: uploadedDocs,
       createdBy: tempUserId,
+      walletAddress: walletAddress || "Not connected",
+      contractAddress: contractAddress,
       status: "pending",
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
     closeNGOModal();
-    showToast("✅ NGO request submitted. Wait for verification.");
+    showToast("✅ NGO request submitted! Wait for verification.");
     toggleAuth(false);
 
   } catch (error) {
@@ -273,8 +385,6 @@ async function submitNGODetails() {
     showToast("⚠️ " + error.message);
   }
 }
-
-
 
 
 
@@ -673,230 +783,45 @@ window.logout = async function () {
 
 
 
+// Listen for changes in ngoRequests
+db.collection("ngoRequests").onSnapshot(async (snapshot) => {
+  snapshot.docChanges().forEach(async (change) => {
+    if (change.type === "modified") {
+      const ngoRequest = change.doc.data();
+      const ngoRequestId = change.doc.id;
 
-// // Firebase Configuration
-// const firebaseConfig = {
-//   apiKey: "AIzaSyCqWrMwOcWrlsk-NbGPaR6mvj9n0TeolPw",
-//   authDomain: "trustchain-e19c9.firebaseapp.com",
-//   projectId: "trustchain-e19c9",
-//   storageBucket: "trustchain-e19c9.appspot.com",
-//   messagingSenderId: "604662210904",
-//   appId: "1:604662210904:web:f0558ef56be87db5c6452d"
-// };
+      // If status updated to approved → move it to ngos collection
+      if (ngoRequest.status === "approved") {
+        try {
+          // Add to ngos collection
+          await db.collection("ngos").doc(ngoRequestId).set({
+            name: ngoRequest.name,
+            goal: ngoRequest.goal,
+            cause: ngoRequest.cause,
+            docs: ngoRequest.docs,
+            createdBy: ngoRequest.createdBy,
+            verified: true,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
 
-// firebase.initializeApp(firebaseConfig);
-// const auth = firebase.auth();
-// const db = firebase.firestore();
-
-// DOM Loaded Event
-// window.addEventListener("DOMContentLoaded", () => {
-//   const authModal = document.getElementById("authModal");
-
-//   if (!authModal) return console.error("authModal not found");
-
-//   auth.onAuthStateChanged(async (user) => {
-//     if (user) {
-//       authModal.style.display = "none";
-
-//       try {
-//         const doc = await db.collection("users").doc(user.uid).get();
-//         const userData = doc.data();
-
-//         if (!userData) return console.warn("User data not found");
-
-//         const welcomeEl = document.getElementById("userWelcome");
-//         if (welcomeEl) welcomeEl.innerText = `👤 ${userData.role === "admin" ? "Admin: " : ""}${userData.name}`;
-
-//         toggleRoleSections(userData.role);
-//       } catch (error) {
-//         console.error("Error fetching user data:", error);
-//       }
-//     } else {
-//       authModal.style.display = "block";
-//     }
-//   });
-// });
-
-// // Toggle UI based on role
-// function toggleRoleSections(role) {
-//   document.getElementById("adminPanel")?.classList.toggle("hidden", role !== "admin");
-//   document.getElementById("donor")?.classList.toggle("hidden", role === "admin");
-//   document.getElementById("ngos")?.classList.remove("hidden");
-// }
-
-// // Toast
-// function showToast(message) {
-//   const toast = document.getElementById("toast");
-//   const toastText = document.getElementById("toast-text");
-//   toastText.textContent = message;
-//   toast.classList.add("show");
-//   setTimeout(() => toast.classList.remove("show"), 3000);
-// }
-
-// // Register
-// const registerForm = document.getElementById("registerForm");
-// if (registerForm) {
-//   registerForm.addEventListener("submit", async (e) => {
-//     e.preventDefault();
-//     const name = document.getElementById("registerName").value;
-//     const email = document.getElementById("registerEmail").value;
-//     const password = document.getElementById("registerPassword").value;
-//     const role = document.querySelector("input[name='role']:checked").value;
-//     const ngoName = role === "admin" ? document.getElementById("registerNGOName").value : null;
-
-//     try {
-//       const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-//       const user = userCredential.user;
-
-//       const userDoc = {
-//         name,
-//         email,
-//         role,
-//         ngoName: ngoName || "",
-//         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-//       };
-
-//       await db.collection("users").doc(user.uid).set(userDoc);
-//       showToast("🎉 Registration successful!");
-//       toggleAuth(false);
-//     } catch (error) {
-//       console.error("Registration Error:", error);
-//       showToast("⚠️ " + error.message);
-//     }
-//   });
-// }
-
-// // Login
-// const loginForm = document.getElementById("loginForm");
-// if (loginForm) {
-//   loginForm.addEventListener("submit", async (e) => {
-//     e.preventDefault();
-
-//     const email = document.getElementById("loginEmail").value;
-//     const password = document.getElementById("loginPassword").value;
-
-//     try {
-//       const userCredential = await auth.signInWithEmailAndPassword(email, password);
-//       const user = userCredential.user;
-
-//       const doc = await db.collection("users").doc(user.uid).get();
-//       const userData = doc.data();
-
-//       showToast(`👋 Welcome back, ${userData.name}`);
-
-//       toggleAuth(false);
-//       document.getElementById("logoutBtn")?.classList.remove("hidden");
-
-//       const welcome = document.getElementById("userWelcome");
-//       if (welcome) welcome.innerText = `👤 ${userData.role === "admin" ? "Admin: " : ""}${userData.name}`;
-
-//       toggleRoleSections(userData.role);
-//       fetchAndRenderUserDonations();
-
-//     } catch (error) {
-//       console.error("Login Error:", error);
-//       showToast("⚠️ " + error.message);
-//     }
-//   });
-// }
-
-// // Donation Submission
-// function submitDonation() {
-//   const user = firebase.auth().currentUser;
-//   if (!user) return alert("You must be logged in to donate.");
-
-//   const uid = user.uid;
-//   const name = document.getElementById("donorName").value.trim();
-//   const email = document.getElementById("donorEmail").value.trim();
-//   const ngo = document.getElementById("donorNGO").value.trim();
-//   const amount = document.getElementById("donorAmount").value.trim();
-
-//   if (!name || !email || !ngo || !amount || isNaN(amount) || parseInt(amount) <= 0) {
-//     return alert("Please fill all fields with valid data.");
-//   }
-
-//   const donation = {
-//     name,
-//     email,
-//     ngo,
-//     amount: parseFloat(amount),
-//     timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-//   };
-
-//   db.collection("users").doc(uid).collection("donations").add(donation)
-//     .then(() => {
-//       showToast("🎉 Thank you for your donation!");
-//       ["donorName", "donorEmail", "donorNGO", "donorAmount"].forEach(id => document.getElementById(id).value = "");
-//     })
-//     .catch((error) => {
-//       showToast("Error saving donation: " + error.message);
-//     });
-// }
-
-// // Logout
-// window.logout = async function () {
-//   try {
-//     await auth.signOut();
-//     showToast("👋 You have been logged out.");
-//     document.getElementById("logoutBtn").classList.add("hidden");
-//     document.getElementById("userWelcome").innerText = "";
-//     window.location.href = "#home";
-//   } catch (error) {
-//     console.error("Logout failed:", error);
-//     showToast("❌ Logout failed");
-//   }
-// };
+          console.log(`✅ NGO approved & moved to ngos: ${ngoRequest.name}`);
+        } catch (err) {
+          console.error("Error moving NGO:", err);
+        }
+      }
+    }
+  });
+});
 
 
 
-// Trigerring fundraiser model after admin role
-// document.getElementById("registerBtn").addEventListener("click", function () {
-//   const role = document.getElementById("role").value;
-//   if (role === "admin") {
-//     document.getElementById("fundraiserModal").classList.remove("hidden");
-//   }
-// });
+function loadNGOs() {
+  db.collection("ngos").where("verified", "==", true).onSnapshot(snapshot => {
+    let ngos = [];
+    snapshot.forEach(doc => ngos.push({ id: doc.id, ...doc.data() }));
+    renderNGOCards(ngos);
+  });
+}
 
-// async function saveFundraiserDetails() {
-//   const userId = auth.currentUser.uid;
-//   const fundraiserName = document.getElementById("fundraiserName").value;
-//   const causeDescription = document.getElementById("causeDescription").value;
-//   const targetAmount = parseInt(document.getElementById("targetAmount").value);
-//   const deadline = document.getElementById("deadline").value;
-
-//   // File upload logic for documents
-//   const docs = document.getElementById("documents").files;
-//   const docURLs = [];
-//   for (let file of docs) {
-//     const storageRef = ref(storage, `documents/${userId}/${file.name}`);
-//     await uploadBytes(storageRef, file);
-//     const url = await getDownloadURL(storageRef);
-//     docURLs.push(url);
-//   }
-
-//   await addDoc(collection(db, "fundraisers"), {
-//     userId,
-//     fundraiserName,
-//     causeDescription,
-//     targetAmount,
-//     deadline,
-//     documents: docURLs,
-//     status: "pending",
-//     type: "individual",
-//     createdAt: new Date()
-//   });
-
-//   showToast("Your fundraiser request has been submitted for verification.");
-//   document.getElementById("fundraiserModal").classList.add("hidden");
-// }
-
-
-// async function loadFundraisers() {
-//   const q = query(collection(db, "fundraisers"), where("status", "==", "approved"));
-//   const snapshot = await getDocs(q);
-//   snapshot.forEach(doc => {
-//     const data = doc.data();
-//     // Create a card with fundraiserName, causeDescription, targetAmount, deadline
-//     // Add to NGO section
-//   });
-// }
+// Call on page load
+loadNGOs();

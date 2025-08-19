@@ -101,6 +101,42 @@ function renderNGOCards(data) {
   });
 }
 
+async function loadStaticNGOs() {
+  try {
+    const res = await fetch("ngos_real_data.json");
+    const data = await res.json();
+
+    // Static NGOs ke liye verified=false laga do
+    data.forEach(ngo => ngo.verified = true);
+
+    renderNGOCards(data);
+  } catch (err) {
+    console.error("Error loading static NGOs:", err);
+  }
+}
+
+function listenToApprovedNGOs() {
+  db.collection("ngoRequests")
+    .where("status", "==", "approved")
+    .orderBy("createdAt", "desc")
+    .onSnapshot(snapshot => {
+      let approvedNGOs = [];
+      snapshot.forEach(doc => {
+        let ngo = doc.data();
+        ngo.verified = true;  // ✅ Mark verified
+        approvedNGOs.push(ngo);
+      });
+
+      // Pehle approved NGOs render karo
+      renderNGOCards(approvedNGOs);
+
+      // Fir neeche static NGOs bhi load karo
+      loadStaticNGOs();
+    });
+}
+
+
+
 //  Search Functionality
 function filterNGOs() {
   const query = searchInput.value.toLowerCase();
@@ -115,29 +151,52 @@ function filterNGOs() {
 
 
 
-function renderDonationCards(donations) {
-  const container = document.getElementById("donationCardsContainer");
-  container.innerHTML = "";
+// function renderDonationCards(donations) {
+//   const container = document.getElementById("donationCardsContainer");
+//   container.innerHTML = "";
 
-  if (!donations.length) {
-    container.innerHTML = "<p>You haven't donated yet. Start supporting an NGO!</p>";
-    return;
-  }
+//   if (!donations.length) {
+//     container.innerHTML = "<p>You haven't donated yet. Start supporting an NGO!</p>";
+//     return;
+//   }
 
-  donations.forEach((donation) => {
-    const card = document.createElement("div");
-    card.className = "donation-card";
+//   donations.forEach((donation) => {
+//     const card = document.createElement("div");
+//     card.className = "donation-card";
 
-    card.innerHTML = `
-      <h4>${donation.ngoName}</h4>
-      <p class="donation-amount">₹${donation.amount}</p>
-      <p><strong>Date:</strong> ${donation.date || "N/A"}</p>
-      <p><strong>Method:</strong> ${donation.method || "Wallet"}</p>
-    `
+//     card.innerHTML = `
+//       <h4>${donation.ngoName}</h4>
+//       <p class="donation-amount">₹${donation.amount}</p>
+//       <p><strong>Date:</strong> ${donation.date || "N/A"}</p>
+//       <p><strong>Method:</strong> ${donation.method || "Wallet"}</p>
+//     `
 
-    container.appendChild(card);
-  });
-}
+//     container.appendChild(card);
+//   });
+// }
+
+
+
+// function renderNGOCards(data) {
+//   const ngoContainer = document.getElementById("ngoCards");
+//   ngoContainer.innerHTML = "";
+
+//   data.forEach((ngo, index) => {
+//     const card = document.createElement("div");
+//     card.classList.add("ngo-col");
+
+//     card.innerHTML = `
+//       <div class="ngo-card">
+//         <h3>${ngo.name}</h3>
+//         <p><strong>Cause:</strong> ${ngo.cause}</p>
+//         <p><strong>Goal:</strong> ₹${ngo.goal.toLocaleString()}</p>
+//         <a href="${ngo.docs?.[0] || "#"}" target="_blank">Documents</a>
+//         <button class="btn" onclick="openDonateModal(${index})">Donate Now</button>
+//       </div>
+//     `;
+//     ngoContainer.appendChild(card);
+//   });
+// }
 
 
 
@@ -379,18 +438,66 @@ function submitDonation() {
 
 
 
+// window.toggleAuth = function(show = true) {
+//   const authModal = document.getElementById("authModal");
+//   if (authModal) {
+//     if (show) {
+//       authModal.classList.remove("hidden");
+//       authModal.style.display = "flex";  // Centering
+//     } else {
+//       authModal.classList.add("hidden");
+//       authModal.style.display = "none";
+//     }
+//   }
+// };
+
+
+// window.toggleAuth = function(show = true) {
+//   const authModal = document.getElementById("authModal");
+//   if (!authModal) return;
+
+//   if (show) {
+//     authModal.classList.add("active");
+//     authModal.classList.remove("hidden");
+//   } else {
+//     authModal.classList.remove("active");
+//     authModal.classList.add("hidden");
+//   }
+// };
+
+
+// Toggle Modal
 window.toggleAuth = function(show = true) {
   const authModal = document.getElementById("authModal");
-  if (authModal) {
-    if (show) {
-      authModal.classList.remove("hidden");
-      authModal.style.display = "flex";  // Centering
-    } else {
-      authModal.classList.add("hidden");
-      authModal.style.display = "none";
-    }
+  if (!authModal) return;
+
+  if (show) {
+    authModal.classList.add("active");
+    authModal.classList.remove("hidden");
+  } else {
+    authModal.classList.remove("active");
+    authModal.classList.add("hidden");
   }
 };
+
+// Close Button & Backdrop Close
+document.addEventListener("DOMContentLoaded", () => {
+  const closeBtn = document.getElementById("closeAuth");
+  const authModal = document.getElementById("authModal");
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => toggleAuth(false));
+  }
+
+  // backdrop click
+  if (authModal) {
+    authModal.addEventListener("click", (e) => {
+      if (e.target === authModal) {
+        toggleAuth(false);
+      }
+    });
+  }
+});
 
 
 

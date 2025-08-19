@@ -170,7 +170,7 @@
 <!-- Auth Modal -->
 <div id="authModal" class="modal hidden">
   <div class="auth-container">
-    <span class="close-button" onclick="toggleAuth(false)">&times;</span>
+    <span class="close-button" id="closeAuth"onclick="toggleAuth(false)" >&times;</span>
 
     <!-- Login Form -->
     <form id="loginForm" class="auth-form">
@@ -239,10 +239,6 @@
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
 
- <script type="module" src="js/auth.js"></script> 
-<script type="module" src="js/script.js"></script>
-<script type="module" src="js/ether.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
 
@@ -258,8 +254,12 @@
   });
 });
 </script>
+<!-- <script type="module" src="js/auth.js"></script>  -->
+<script type="module" src="js/script.js"></script>
+<script type="module" src="js/ether.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script type="module" src="js/auth.js"></script> 
 
- 
 </body>
 
 </html>
