@@ -1,5 +1,5 @@
 import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
-import { abi, contractaddress } from "./constant.js";
+import { abi, contractaddress ,bytecode} from "./constant.js";
 // import { Contractindex } from "./script.js";
 
 // console.log(Contractindex);
@@ -11,6 +11,7 @@ const load = document.getElementById("loading");
 const check = document.getElementById("check");
 const conv = document.getElementById("conversion");
 const loadingScreen = document.getElementById("loading-screen");
+const deploy = document.getElementById("deploy");
 
 let currRate;
 let provider, signer;
@@ -45,7 +46,7 @@ function getCurrentContract() {
     );
 }
 
-connectbtn.addEventListener('click', async () => {
+ async function Connect() {
     console.log("Connect Button clicked");
     if (window.ethereum) {
         provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -69,8 +70,8 @@ connectbtn.addEventListener('click', async () => {
 
     // adrs.innerText=`Wallet Address: ${address}`;
 
-});
-
+};
+connectbtn.addEventListener('click',()=> Connect());
 // console.log("Current index:", window.getContractIndex());
 check.addEventListener('click', () => {
 
@@ -79,6 +80,33 @@ check.addEventListener('click', () => {
 
 });
 
+async function deployDonationContract() {
+  if (!signer) {
+    await Connect();
+  }
+
+  console.log("🚀 Deploying new Donation contract...");
+
+  const DonationFactory = new ethers.ContractFactory(abi, bytecode, signer);
+  const contract = await DonationFactory.deploy();
+
+  console.log("⏳ Tx hash:", contract.deployTransaction.hash);
+
+  await contract.deployed();
+  console.log("✅ Contract deployed at:", contract.address);
+
+  // Push to your global contractaddress array (so rest of your code can use it)
+//   contractaddress.push(contract.address);
+//   window.ContractIndex = contractaddress.length - 1; // point to latest
+
+  showToast(`New Contract Deployed at: ${contract.address}`);
+  return contract;
+}
+
+deploy.addEventListener("click", async () => {
+  const deployed = await deployDonationContract();
+  console.log("Now ready to donate to:", deployed.address);
+});
 
 EthSend.addEventListener('click', async () => {
     loadingScreen.style.display = "flex";
