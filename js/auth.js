@@ -338,53 +338,96 @@ function closeNGOModal() {
 
 
 
+// async function submitNGODetails() {
+//   const goal = document.getElementById("ngoGoal").value.trim();
+//   const cause = document.getElementById("ngoCause").value.trim();
+//   const files = document.getElementById("ngoDocs").files;
+
+//   if (!goal || !cause) {
+//     showToast("⚠️ Please fill all fields.");
+//     return;
+//   }
+
+//   try {
+//     let uploadedDocs = [];
+//     for (let file of files) {
+//       const storageRef = firebase.storage().ref(`ngoDocs/${tempUserId}/${file.name}`);
+//       await storageRef.put(file);
+//       const url = await storageRef.getDownloadURL();
+//       uploadedDocs.push(url);
+//     }
+
+//     // contract address from blockchain
+//     const contractAddress = await deployDonationContract();
+
+//     //  Get wallet address from user document
+//     const userDoc = await db.collection("users").doc(tempUserId).get();
+//     const walletAddress = userDoc.exists ? userDoc.data().walletAddress : null;
+
+//     await db.collection("ngoRequests").add({
+//       name: tempNGOName,
+//       goal: parseInt(goal),
+//       cause,
+//       docs: uploadedDocs,
+//       createdBy: tempUserId,
+//       walletAddress: walletAddress || "Not connected",
+//       contractAddress: contractAddress,
+//       status: "pending",
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     });
+
+//     closeNGOModal();
+//     showToast("✅ NGO request submitted! Wait for verification.");
+//     toggleAuth(false);
+
+//   } catch (error) {
+//     console.error(error.message);
+//     showToast("⚠️ " + error.message);
+//   }
+// }
+
+
+
+
+// Called after admin submits NGO form
 async function submitNGODetails() {
-  const goal = document.getElementById("ngoGoal").value.trim();
-  const cause = document.getElementById("ngoCause").value.trim();
-  const files = document.getElementById("ngoDocs").files;
-
-  if (!goal || !cause) {
-    showToast("⚠️ Please fill all fields.");
-    return;
-  }
-
   try {
-    let uploadedDocs = [];
-    for (let file of files) {
-      const storageRef = firebase.storage().ref(`ngoDocs/${tempUserId}/${file.name}`);
-      await storageRef.put(file);
-      const url = await storageRef.getDownloadURL();
-      uploadedDocs.push(url);
+    // Get logged-in user
+    const user = firebase.auth().currentUser;
+    if (!user) {
+      showToast("Please login first!");
+      return;
     }
 
-    // contract address from blockchain
-    const contractAddress = await ;
+    // Connect wallet + deploy contract
+    if (!signer) {
+      await Connect(); // your wallet connect function
+    }
+    const walletAddress = await signer.getAddress();
+    const contract = await deployDonationContract(); // your function
+    const contractAddress = contract.address;
 
-    //  Get wallet address from user document
-    const userDoc = await db.collection("users").doc(tempUserId).get();
-    const walletAddress = userDoc.exists ? userDoc.data().walletAddress : null;
-
-    await db.collection("ngoRequests").add({
-      name: tempNGOName,
-      goal: parseInt(goal),
-      cause,
-      docs: uploadedDocs,
-      createdBy: tempUserId,
-      walletAddress: walletAddress || "Not connected",
+    // Save NGO data in Firestore
+    await db.collection("ngoRequests").doc(user.uid).set({
+      name: document.getElementById("ngoName").value,
+      goal: parseInt(document.getElementById("ngoGoal").value),
+      category: "General", // or from form
+      status: "pending",   // Admin will approve manually
+      walletAddress: walletAddress,
       contractAddress: contractAddress,
-      status: "pending",
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    closeNGOModal();
-    showToast("✅ NGO request submitted! Wait for verification.");
-    toggleAuth(false);
-
-  } catch (error) {
-    console.error(error.message);
-    showToast("⚠️ " + error.message);
+    showToast("NGO request submitted! Waiting for approval.");
+    document.getElementById("ngoDetailsModal").classList.add("hidden");
+  } catch (err) {
+    console.error("Error submitting NGO:", err);
+    showToast("Error: " + err.message);
   }
 }
+
+
+
 
 
 
@@ -746,37 +789,6 @@ window.logout = async function () {
     showToast("❌ Logout failed");
   }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

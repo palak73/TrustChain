@@ -28,7 +28,7 @@ conv.innerHTML = `1 ETH = ₹${data.ethereum.inr}`;
 function showToast(message) {
     const toast = document.getElementById("toast");
     const toastText = document.getElementById("toast-text");
-    toastText.textContent = message;
+    toastText.textContent = message; 
     toast.classList.add("show");
 
     setTimeout(() => {
@@ -71,6 +71,7 @@ function getCurrentContract() {
     // adrs.innerText=`Wallet Address: ${address}`;
 
 };
+
 connectbtn.addEventListener('click',()=> Connect());
 // console.log("Current index:", window.getContractIndex());
 check.addEventListener('click', () => {

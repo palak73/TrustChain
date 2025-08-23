@@ -72,12 +72,12 @@ export let Contractindex = 0; // Initialize
 window.getContractIndex = 0;
 
 
-// Render NGO Cards
 function renderNGOCards(data) {
   ngoContainer.innerHTML = "";
-  data.forEach((ngo, index) => {
+  select.innerHTML = ""; // ✅ reset options
 
-    const newOption = document.createElement('option');
+  data.forEach((ngo, index) => {
+    const newOption = document.createElement("option");
     newOption.value = `${index}`;
     newOption.text = `${ngo.name}`;
     select.appendChild(newOption);
@@ -90,16 +90,17 @@ function renderNGOCards(data) {
         <h3>${ngo.name}</h3>
         <p><strong>Category:</strong> ${ngo.category}</p>
         <p><strong>Location:</strong> ${ngo.location || "N/A"}</p>
-        <p><strong>Goal:</strong> ₹${ngo.goal.toLocaleString()}</p>
+        <p><strong>Goal:</strong> ₹${ngo.goal?.toLocaleString?.() || "N/A"}</p>
         <a href="${ngo.website || "#"}" target="_blank">Website</a>
         ${ngo.verified ? '<p style="color:green;">✅ Verified</p>' : ""}
-        <button id="donatenowbtn" class="btn" onclick="openDonateModal(${index})">Donate Now</button>
+        <button class="btn" onclick="openDonateModal(${index})">Donate Now</button>
       </div>
     `;
 
     ngoContainer.appendChild(card);
   });
 }
+
 
 async function loadStaticNGOs() {
   try {
@@ -115,6 +116,7 @@ async function loadStaticNGOs() {
   }
 }
 
+
 function listenToApprovedNGOs() {
   db.collection("ngoRequests")
     .where("status", "==", "approved")
@@ -123,17 +125,19 @@ function listenToApprovedNGOs() {
       let approvedNGOs = [];
       snapshot.forEach(doc => {
         let ngo = doc.data();
-        ngo.verified = true;  // ✅ Mark verified
+        ngo.id = doc.id;  // Save ID for later use
+        ngo.verified = true;
         approvedNGOs.push(ngo);
       });
 
-      // Pehle approved NGOs render karo
+      // First show approved NGOs
       renderNGOCards(approvedNGOs);
 
-      // Fir neeche static NGOs bhi load karo
+      // Then load static NGOs also
       loadStaticNGOs();
     });
 }
+
 
 
 
@@ -148,55 +152,6 @@ function filterNGOs() {
   renderNGOCards(filtered);
 }
 
-
-
-
-// function renderDonationCards(donations) {
-//   const container = document.getElementById("donationCardsContainer");
-//   container.innerHTML = "";
-
-//   if (!donations.length) {
-//     container.innerHTML = "<p>You haven't donated yet. Start supporting an NGO!</p>";
-//     return;
-//   }
-
-//   donations.forEach((donation) => {
-//     const card = document.createElement("div");
-//     card.className = "donation-card";
-
-//     card.innerHTML = `
-//       <h4>${donation.ngoName}</h4>
-//       <p class="donation-amount">₹${donation.amount}</p>
-//       <p><strong>Date:</strong> ${donation.date || "N/A"}</p>
-//       <p><strong>Method:</strong> ${donation.method || "Wallet"}</p>
-//     `
-
-//     container.appendChild(card);
-//   });
-// }
-
-
-
-// function renderNGOCards(data) {
-//   const ngoContainer = document.getElementById("ngoCards");
-//   ngoContainer.innerHTML = "";
-
-//   data.forEach((ngo, index) => {
-//     const card = document.createElement("div");
-//     card.classList.add("ngo-col");
-
-//     card.innerHTML = `
-//       <div class="ngo-card">
-//         <h3>${ngo.name}</h3>
-//         <p><strong>Cause:</strong> ${ngo.cause}</p>
-//         <p><strong>Goal:</strong> ₹${ngo.goal.toLocaleString()}</p>
-//         <a href="${ngo.docs?.[0] || "#"}" target="_blank">Documents</a>
-//         <button class="btn" onclick="openDonateModal(${index})">Donate Now</button>
-//       </div>
-//     `;
-//     ngoContainer.appendChild(card);
-//   });
-// }
 
 
 
@@ -768,3 +723,46 @@ function renderDonationChart(data) {
 //     // Add to NGO section
 //   });
 // }
+
+
+
+async function handleDonate(ngoId, ngoName, contractAddress, amountEth) {
+  try {
+    if (!window.ethereum) {
+      alert("Please install MetaMask!");
+      return;
+    }
+
+    // Connect to MetaMask
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = provider.getSigner();
+    const donorWallet = await signer.getAddress();
+
+    // Connect to NGO smart contract
+    const contract = new ethers.Contract(contractAddress, abi, signer);
+
+    // Send donation (convert to wei)
+    const tx = await contract.donate({
+      value: ethers.utils.parseEther(amountEth) // e.g. "0.05"
+    });
+
+    // Wait for transaction confirmation
+    await tx.wait();
+
+    // ✅ Save donation record in Firestore (v8 style)
+    await firebase.firestore().collection("donations").add({
+      ngoId: ngoId,
+      ngoName: ngoName,
+      donorWallet: donorWallet,
+      amountEth: amountEth,
+      txHash: tx.hash,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    alert(`✅ Donation successful! Tx: ${tx.hash}`);
+  } catch (err) {
+    console.error("Donation error:", err);
+    alert("Donation failed: " + err.message);
+  }
+}
