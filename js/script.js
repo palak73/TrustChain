@@ -73,6 +73,9 @@ window.getContractIndex = 0;
 
 
 function renderNGOCards(data) {
+  const ngoContainer = document.getElementById("ngoCards");
+  const select = document.getElementById("mySelect");
+
   ngoContainer.innerHTML = "";
   select.innerHTML = ""; // ✅ reset options
 
@@ -101,40 +104,46 @@ function renderNGOCards(data) {
   });
 }
 
+// available globally 
+window.renderNGOCards = renderNGOCards;
+
+
+
 
 async function loadStaticNGOs() {
   try {
     const res = await fetch("ngos_real_data.json");
     const data = await res.json();
 
-    // Static NGOs ke liye verified=false laga do
     data.forEach(ngo => ngo.verified = true);
 
-    renderNGOCards(data);
+    return data; // ⬅ return instead of rendering
   } catch (err) {
     console.error("Error loading static NGOs:", err);
+    return [];
   }
 }
-
 
 function listenToApprovedNGOs() {
   db.collection("ngoRequests")
     .where("status", "==", "approved")
     .orderBy("createdAt", "desc")
-    .onSnapshot(snapshot => {
+    .onSnapshot(async snapshot => {
       let approvedNGOs = [];
       snapshot.forEach(doc => {
         let ngo = doc.data();
-        ngo.id = doc.id;  // Save ID for later use
+        ngo.id = doc.id;
         ngo.verified = true;
         approvedNGOs.push(ngo);
       });
 
-      // First show approved NGOs
-      renderNGOCards(approvedNGOs);
+      // Load static NGOs
+      const staticNGOs = await loadStaticNGOs();
 
-      // Then load static NGOs also
-      loadStaticNGOs();
+      // Merge → approved first, then static
+      const allNGOs = [...approvedNGOs, ...staticNGOs];
+
+      renderNGOCards(allNGOs);
     });
 }
 
@@ -637,92 +646,6 @@ function renderDonationChart(data) {
     },
   });
 }
-
-
-
-// async function submitTheDonation() {
-//   const amountInput = document.getElementById("donationAmount");
-//   const amount = parseFloat(amountInput.value);
-
-//   if (!amount || amount <= 0) {
-//     alert("Please enter a valid amount");
-//     return;
-//   }
-
-//   const user = auth.currentUser;
-//   if (!user) {
-//     alert("Please log in to donate.");
-//     return;
-//   }
-
-//   try {
-//     await addDoc(collection(db, "donations"), {
-//       userId: user.uid,
-//       amount: amount,
-//       timestamp: serverTimestamp(),
-//     });
-//     alert("Donation successful!");
-//     amountInput.value = "";
-//   } catch (error) {
-//     console.error("Error saving donation:", error);
-//     alert("Donation failed.");
-//   }
-// }
-
-
-
-
-// Triggerring  modal after admin chooses role
-// document.getElementById("registerBtn").addEventListener("click", function () {
-//   const role = document.getElementById("role").value;
-//   if (role === "admin") {
-//     document.getElementById("fundraiserModal").classList.remove("hidden");
-//   }
-// });
-
-// async function saveFundraiserDetails() {
-//   const userId = auth.currentUser.uid;
-//   const fundraiserName = document.getElementById("fundraiserName").value;
-//   const causeDescription = document.getElementById("causeDescription").value;
-//   const targetAmount = parseInt(document.getElementById("targetAmount").value);
-//   const deadline = document.getElementById("deadline").value;
-
-//   // File upload logic for documents
-//   const docs = document.getElementById("documents").files;
-//   const docURLs = [];
-//   for (let file of docs) {
-//     const storageRef = ref(storage, `documents/${userId}/${file.name}`);
-//     await uploadBytes(storageRef, file);
-//     const url = await getDownloadURL(storageRef);
-//     docURLs.push(url);
-//   }
-
-//   await addDoc(collection(db, "fundraisers"), {
-//     userId,
-//     fundraiserName,
-//     causeDescription,
-//     targetAmount,
-//     deadline,
-//     documents: docURLs,
-//     status: "pending",
-//     type: "individual",
-//     createdAt: new Date()
-//   });
-
-//   showToast("Your fundraiser request has been submitted for verification.");
-//   document.getElementById("fundraiserModal").classList.add("hidden");
-// }
-
-
-// async function loadFundraisers() {
-//   const q = query(collection(db, "fundraisers"), where("status", "==", "approved"));
-//   const snapshot = await getDocs(q);
-//   snapshot.forEach(doc => {
-//     const data = doc.data();
-//     // Create a card with fundraiserName, causeDescription, targetAmount, deadline
-//     // Add to NGO section
-//   });
-// }
 
 
 
