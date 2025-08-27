@@ -1,6 +1,7 @@
 import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
-import { abi, contractaddress ,bytecode} from "./constant.js";
+import { abi, contractaddress, bytecode } from "./constant.js";
 // import { Contractindex } from "./script.js";
+import "./script.js";
 
 // console.log(Contractindex);
 
@@ -13,13 +14,14 @@ const conv = document.getElementById("conversion");
 const loadingScreen = document.getElementById("loading-screen");
 const deploy = document.getElementById("deploy");
 
-let currRate;
+let currRate = 0;
 let provider, signer;
 
 
 const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=inr");
 const data = await res.json();
 currRate = data.ethereum.inr;
+console.log(typeof (currRate));
 console.log(`1 ETH = ₹${data.ethereum.inr}`);
 conv.innerHTML = `1 ETH = ₹${data.ethereum.inr}`;
 
@@ -28,7 +30,7 @@ conv.innerHTML = `1 ETH = ₹${data.ethereum.inr}`;
 function showToast(message) {
     const toast = document.getElementById("toast");
     const toastText = document.getElementById("toast-text");
-    toastText.textContent = message; 
+    toastText.textContent = message;
     toast.classList.add("show");
 
     setTimeout(() => {
@@ -46,7 +48,7 @@ function getCurrentContract() {
     );
 }
 
- async function Connect() {
+async function Connect() {
     console.log("Connect Button clicked");
     if (window.ethereum) {
         provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -72,59 +74,62 @@ function getCurrentContract() {
 
 };
 
-connectbtn.addEventListener('click',()=> Connect());
+connectbtn.addEventListener('click', () => Connect());
 // console.log("Current index:", window.getContractIndex());
 check.addEventListener('click', () => {
 
-    const total = currRate * donateamt.value;
-    conv.innerText = `${donateamt.value} ETH = ₹${total}`;
+    const total = donateamt.value / currRate;
+    conv.innerText = `₹${donateamt.value} = ${total} ETH`;
 
 });
 
 async function deployDonationContract() {
-  if (!signer) {
-    await Connect();
-  }
+    if (!signer) {
+        await Connect();
+    }
 
-  console.log("🚀 Deploying new Donation contract...");
+    console.log("🚀 Deploying new Donation contract...");
 
-  const DonationFactory = new ethers.ContractFactory(abi, bytecode, signer);
-  const contract = await DonationFactory.deploy();
+    const DonationFactory = new ethers.ContractFactory(abi, bytecode, signer);
+    const contract = await DonationFactory.deploy();
 
-  console.log("⏳ Tx hash:", contract.deployTransaction.hash);
+    console.log("⏳ Tx hash:", contract.deployTransaction.hash);
 
-  await contract.deployed();
-  console.log("✅ Contract deployed at:", contract.address);
+    await contract.deployed();
+    console.log("✅ Contract deployed at:", contract.address);
 
-  // Push to your global contractaddress array (so rest of your code can use it)
-//   contractaddress.push(contract.address);
-//   window.ContractIndex = contractaddress.length - 1; // point to latest
+    // Push to your global contractaddress array (so rest of your code can use it)
+    //   contractaddress.push(contract.address);
+    //   window.ContractIndex = contractaddress.length - 1; // point to latest
 
-  showToast(`New Contract Deployed at: ${contract.address}`);
-  return contract;
+    showToast(`New Contract Deployed at: ${contract.address}`);
+    return contract;
 }
 
 deploy.addEventListener("click", async () => {
-  const deployed = await deployDonationContract();
-  console.log("Now ready to donate to:", deployed.address);
+    const deployed = await deployDonationContract();
+    console.log("Now ready to donate to:", deployed.address);
 });
 
 EthSend.addEventListener('click', async () => {
     loadingScreen.style.display = "flex";
     try {
         const contract = getCurrentContract();
-        const dntamt = donateamt.value;
+        const dntamt = donateamt.value / currRate;
+        console.log("dntamt is ok till here")
         //  console.log(typeof dntamt);
         // Gets fresh index every time
 
         console.log("Current index at tx time:", window.Contractindex);
         console.log("Using address:", contractaddress[window.Contractindex]);
 
-        const convrt = await contract.getConversionrate(ethers.utils.parseEther(dntamt));
-        console.log(convrt);
-        console.log(ethers.utils.formatUnits(convrt, 18));
+        // const convrt = await contract.getConversionrate(ethers.utils.parseEther(dntamt));
+        // console.log("Line working");
+        // console.log(convrt);
+        // console.log(ethers.utils.formatUnits(convrt, 18));
 
         const tx = await contract.Fund({ value: ethers.utils.parseEther(dntamt.toString()) });
+        console.log("Line working");
         // load.innerHTML = `Awaiting Transaction Results... Please wait...`;
 
 
@@ -142,6 +147,7 @@ EthSend.addEventListener('click', async () => {
 
         // load.innerHTML = `Transaction Successful ${tx.hash}`;
         load.innerHTML = `✅ Transaction Successful: <a href="https://sepolia.etherscan.io/tx/${tx.hash}" target="_blank" style="color: #4CAF50; text-decoration: underline;">View on Etherscan</a>`;
+
 
 
     }
