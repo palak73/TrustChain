@@ -172,7 +172,6 @@ function showToast(message) {
 
 
 
-
 let tempUserId = null;
 let tempNGOName = null;
 
@@ -211,10 +210,10 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
     await db.collection("users").doc(user.uid).set(userData);
 
     if (role === "ngo-admin") {
-      openNGOModal(); // Show second form
+      openNGOModal(); // Show second form for NGO details
     } else {
       showToast("🎉 Registration successful!");
-      toggleAuth(false);
+      toggleAuth(false); // ✅ Close modal for donor
     }
 
   } catch (error) {
@@ -231,7 +230,9 @@ function openNGOModal() {
 // Close Modal
 function closeNGOModal() {
   document.getElementById("ngoDetailsModal").classList.add("hidden");
+  toggleAuth(false); // ✅ Close auth popup too after NGO details done
 }
+
 
 // Submit NGO Details
 // async function submitNGODetails() {
