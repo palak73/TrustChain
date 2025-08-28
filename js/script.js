@@ -228,7 +228,7 @@ function showToast(message) {
 
   setTimeout(() => {
     toast.classList.remove("show");
-  }, 3000);
+  }, 7000);
 }
 // Save donation to firebase and run ml 
 
@@ -355,30 +355,30 @@ async function confirmDonation() {
 
   // Here donation is considered safe --- blockchain transaction
   try {
-    loadingScreen.style.display = "flex";
-    const contract = getCurrentContract();
-    const tx = await contract.Fund({ value: ethers.utils.parseEther(amount.toString()) });
+    // loadingScreen.style.display = "flex";
+    // const contract = getCurrentContract();
+    // const tx = await contract.Fund({ value: ethers.utils.parseEther(amount.toString()) });
 
-    await tx.wait(); //  Here Waiting  for Ethereum confirmation
-    loadingScreen.style.display = "none";
-    load.innerHTML = `Transaction Successful: ${tx.hash}`;
+    // await tx.wait(); //  Here Waiting  for Ethereum confirmation
+    // loadingScreen.style.display = "none";
+    // load.innerHTML = `Transaction Successful: ${tx.hash}`;
 
-    //  saving  to Firebase After ETH success
-    const donationData = {
-      userId: user.uid,
-      userName: user.displayName || "Anonymous",
-      ngoName: selectedNGO.name,
-      amount: amount,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    // //  saving  to Firebase After ETH success
+    // const donationData = {
+    //   userId: user.uid,
+    //   userName: user.displayName || "Anonymous",
+    //   ngoName: selectedNGO.name,
+    //   amount: amount,
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    // };
 
-    await db.collection("donations").add(donationData);
-    showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
-    closeModal();
-    fetchAndRenderUserDonations();
+    // await db.collection("donations").add(donationData);
+    // showToast(`✅ Thank you! You donated ${amount} ETH to ${selectedNGO.name}`);
+    // closeModal();
+    // fetchAndRenderUserDonations();
 
   } catch (err) {
-    loadingScreen.style.display = "none";
+    // loadingScreen.style.display = "none";
     console.error("Blockchain donation failed:", err);
     showToast("❌ Ethereum transaction failed. Donation not saved.");
   }
@@ -725,3 +725,13 @@ async function handleDonate(ngoId, ngoName, contractAddress, amountEth) {
     alert("Donation failed: " + err.message);
   }
 }
+
+
+
+
+
+
+
+
+console.log("Current user:", user);
+console.log("User UID:", user ? user.uid : "no user");

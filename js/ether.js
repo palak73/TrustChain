@@ -33,7 +33,7 @@ function showToast(message) {
 
     setTimeout(() => {
         toast.classList.remove("show");
-    }, 3000);
+    }, 7000);
 }
 
 

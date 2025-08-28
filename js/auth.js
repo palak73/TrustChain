@@ -324,6 +324,44 @@ window.closeNGOModal = function() {
 // };
 
 
+// async function submitNGODetails() {
+//   try {
+//     const user = firebase.auth().currentUser;
+//     if (!user) {
+//       showToast("Please login first!");
+//       return;
+//     }
+
+//     // ✅ Connect wallet automatically if not connected
+//     if (!window.signer) {
+//       await window.Connect();
+//     }
+
+//     const walletAddress = await window.signer.getAddress();
+//     const contract = await window.deployDonationContract();
+//     const contractAddress = contract.address;
+
+//     await db.collection("ngoRequests").doc(user.uid).set({
+//       name: tempNGOName || document.getElementById("ngoName").value,
+//       goal: parseInt(document.getElementById("ngoGoal").value),
+//       cause: document.getElementById("ngoCause").value,
+//       status: "pending",   // wait for admin approval
+//       walletAddress,
+//       contractAddress,
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     });
+
+//     showToast("✅ NGO request submitted! Waiting for approval.");
+//     closeNGOModal(); // hide popup after submit
+
+//   } catch (err) {
+//     console.error("Error submitting NGO:", err);
+//     showToast("⚠️ " + err.message);
+//   }
+// }
+// window.submitNGODetails = submitNGODetails;
+
+
 async function submitNGODetails() {
   try {
     const user = firebase.auth().currentUser;
@@ -338,9 +376,30 @@ async function submitNGODetails() {
     }
 
     const walletAddress = await window.signer.getAddress();
+
+    // ✅ Deploy smart contract dynamically for this NGO
     const contract = await window.deployDonationContract();
     const contractAddress = contract.address;
 
+    // ✅ Handle NGO docs upload
+    const fileInput = document.getElementById("ngoDocs"); // <input type="file" id="ngoDocs" multiple>
+    let uploadedDocs = [];
+
+    if (fileInput && fileInput.files.length > 0) {
+      const storageRef = firebase.storage().ref(`ngoDocs/${user.uid}/`);
+      
+      for (let file of fileInput.files) {
+        const fileRef = storageRef.child(file.name);
+        await fileRef.put(file);
+        const downloadURL = await fileRef.getDownloadURL();
+        uploadedDocs.push({
+          name: file.name,
+          url: downloadURL
+        });
+      }
+    }
+
+    // ✅ Save NGO Request in Firestore
     await db.collection("ngoRequests").doc(user.uid).set({
       name: tempNGOName || document.getElementById("ngoName").value,
       goal: parseInt(document.getElementById("ngoGoal").value),
@@ -348,6 +407,8 @@ async function submitNGODetails() {
       status: "pending",   // wait for admin approval
       walletAddress,
       contractAddress,
+      documents: uploadedDocs, // store uploaded doc metadata
+      createdBy: user.uid,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
@@ -360,9 +421,6 @@ async function submitNGODetails() {
   }
 }
 window.submitNGODetails = submitNGODetails;
-
-
-
 
 
 window.addEventListener("DOMContentLoaded", () => {
