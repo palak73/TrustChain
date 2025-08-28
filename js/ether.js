@@ -70,6 +70,10 @@ function getCurrentContract() {
 
     // adrs.innerText=`Wallet Address: ${address}`;
 
+window.Connect = Connect;
+window.signer = signer;
+window.provider = provider;
+
 };
 
 connectbtn.addEventListener('click',()=> Connect());

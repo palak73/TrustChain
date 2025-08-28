@@ -231,54 +231,137 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
 // Open NGO Details Modal
 function openNGOModal() {
-  document.getElementById("ngoDetailsModal").classList.remove("hidden");
+   const modal = document.getElementById("ngoDetailsModal");
+  // document.getElementById("ngoDetailsModal").classList.remove("hidden");
+   modal.classList.remove("hidden");
+   console.log("Opening modal:", modal);
 }
 
 // Close NGO Details Modal
-function closeNGOModal() {
-  document.getElementById("ngoDetailsModal").classList.add("hidden");
+window.closeNGOModal = function() {
+  // document.getElementById("ngoDetailsModal").classList.add("hidden");
+  const modal = document.getElementById("ngoDetailsModal");
+  modal.classList.add("hidden");
   showToast("✅ NGO details submitted successfully , Wait for verification!");
-}
+};
 
 
 
 
-// Called after admin submits NGO form
+// // Called after admin submits NGO form
+// async function submitNGODetails() {
+//   try {
+//     // Get logged-in user
+//     const user = firebase.auth().currentUser;
+//     if (!user) {
+//       showToast("Please login first!");
+//       return;
+//     }
+
+//     // Connect wallet + deploy contract
+//     if (!signer) {
+//       await Connect(); // your wallet connect function
+//     }
+//     const walletAddress = await signer.getAddress();
+//     const contract = await deployDonationContract(); // your function
+//     const contractAddress = contract.address;
+
+//     // Save NGO data in Firestore
+//     await db.collection("ngoRequests").doc(user.uid).set({
+//       name: document.getElementById("ngoName").value,
+//       goal: parseInt(document.getElementById("ngoGoal").value),
+//       category: "General", // or from form
+//       status: "pending",   // Admin will approve manually
+//       walletAddress: walletAddress,
+//       contractAddress: contractAddress,
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     });
+
+//     showToast("NGO request submitted! Waiting for approval.");
+//     document.getElementById("ngoDetailsModal").classList.add("hidden");
+//   } catch (err) {
+//     console.error("Error submitting NGO:", err);
+//     showToast("Error: " + err.message);
+//   }
+// }
+
+
+// window.submitNGODetails = async function() {
+//   try {
+//     const user = firebase.auth().currentUser;
+//     if (!user) {
+//       showToast("Please login first!");
+//       return;
+//     }
+
+//     // Connect wallet if not already
+//     if (!window.signer) {
+//       await window.Connect(); // make sure Connect() sets `signer` globally
+//     }
+
+//     const walletAddress = await window.signer.getAddress();
+//     const contract = await deployDonationContract();
+//     const contractAddress = contract.address;    
+
+//     // Save NGO data
+//     await db.collection("ngoRequests").doc(user.uid).set({
+//       name: document.getElementById("ngoName").value,
+//       goal: parseInt(document.getElementById("ngoGoal").value),
+//       category: "General",
+//       status: "pending",
+//       walletAddress,
+//       contractAddress,
+//       createdAt: firebase.firestore.FieldValue.serverTimestamp()
+//     });
+
+//     showToast("NGO request submitted! Waiting for approval.");
+//     document.getElementById("ngoDetailsModal").classList.add("hidden");
+
+//   } catch (err) {
+//     console.error("Error submitting NGO:", err);
+//     showToast("Error: " + err.message);
+//   }
+// };
+
+
 async function submitNGODetails() {
   try {
-    // Get logged-in user
     const user = firebase.auth().currentUser;
     if (!user) {
       showToast("Please login first!");
       return;
     }
 
-    // Connect wallet + deploy contract
-    if (!signer) {
-      await Connect(); // your wallet connect function
+    // ✅ Connect wallet automatically if not connected
+    if (!window.signer) {
+      await window.Connect();
     }
-    const walletAddress = await signer.getAddress();
-    const contract = await deployDonationContract(); // your function
+
+    const walletAddress = await window.signer.getAddress();
+    const contract = await window.deployDonationContract();
     const contractAddress = contract.address;
 
-    // Save NGO data in Firestore
     await db.collection("ngoRequests").doc(user.uid).set({
-      name: document.getElementById("ngoName").value,
+      name: tempNGOName || document.getElementById("ngoName").value,
       goal: parseInt(document.getElementById("ngoGoal").value),
-      category: "General", // or from form
-      status: "pending",   // Admin will approve manually
-      walletAddress: walletAddress,
-      contractAddress: contractAddress,
+      cause: document.getElementById("ngoCause").value,
+      status: "pending",   // wait for admin approval
+      walletAddress,
+      contractAddress,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
 
-    showToast("NGO request submitted! Waiting for approval.");
-    document.getElementById("ngoDetailsModal").classList.add("hidden");
+    showToast("✅ NGO request submitted! Waiting for approval.");
+    closeNGOModal(); // hide popup after submit
+
   } catch (err) {
     console.error("Error submitting NGO:", err);
-    showToast("Error: " + err.message);
+    showToast("⚠️ " + err.message);
   }
 }
+window.submitNGODetails = submitNGODetails;
+
+
 
 
 
@@ -337,7 +420,7 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("ngos")?.classList.remove("hidden");
 
       // Render user donation history
-      fetchAndRenderUserDonations();
+      //fetchAndRenderUserDonations();
 
     } catch (error) {
       console.error("Login Error:", error.message);

@@ -220,7 +220,7 @@
 
 
 
-<div id="ngoDetailsModal" class="modal hidden">
+<!-- <div id="ngoDetailsModal" class="modal hidden">
   <div class="modal-content">
     <span class="close-button" onclick="closeNGOModal()">&times;</span>
     <h2>Register Your Cause</h2>
@@ -233,8 +233,26 @@
 
     <button id="deploy" onclick="submitNGODetails()">Submit</button>
   </div>
-</div>
+</div> -->
 
+
+
+<!-- NGO Details Modal -->
+<div id="ngoDetailsModal" class="ngo-modal hidden">
+  <div class="ngo-modal-content">
+    <span class="close-button" onclick="closeNGOModal()">&times;</span>
+    <h2>Register Your Cause</h2>
+    <p>Please provide details for your NGO or Social Cause</p>
+
+    <input type="number" id="ngoGoal" placeholder="Funding Goal (₹)" required>
+    <textarea id="ngoCause" placeholder="Describe your cause..." required></textarea>
+
+    <label>Upload Verification Documents:</label>
+    <input type="file" id="ngoDocs" multiple>
+
+    <button id="deploy" onclick="submitNGODetails()">Submit</button>
+  </div>
+</div>
 
 
  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>

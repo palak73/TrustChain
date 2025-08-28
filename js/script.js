@@ -71,13 +71,9 @@ const close = document.getElementById("close");
 export let Contractindex = 0; // Initialize
 window.getContractIndex = 0;
 
-
 function renderNGOCards(data) {
-  const ngoContainer = document.getElementById("ngoCards");
-  const select = document.getElementById("mySelect");
-
   ngoContainer.innerHTML = "";
-  select.innerHTML = ""; // ✅ reset options
+  select.innerHTML = ""; //  reset options
 
   data.forEach((ngo, index) => {
     const newOption = document.createElement("option");
@@ -90,7 +86,7 @@ function renderNGOCards(data) {
 
     card.innerHTML = `
       <div class="ngo-card">
-        <h3>${ngo.name}</h3>
+        <h3>${ngo.verified ? "⭐ " : ""}${ngo.name}</h3>
         <p><strong>Category:</strong> ${ngo.category}</p>
         <p><strong>Location:</strong> ${ngo.location || "N/A"}</p>
         <p><strong>Goal:</strong> ₹${ngo.goal?.toLocaleString?.() || "N/A"}</p>
@@ -104,31 +100,54 @@ function renderNGOCards(data) {
   });
 }
 
+
 // available globally 
 window.renderNGOCards = renderNGOCards;
 
 
 
 
-async function loadStaticNGOs() {
-  try {
-    const res = await fetch("ngos_real_data.json");
-    const data = await res.json();
+// async function loadStaticNGOs() {
+//   try {
+//     const res = await fetch("ngos_real_data.json");
+//     const data = await res.json();
 
-    data.forEach(ngo => ngo.verified = true);
+//     data.forEach(ngo => ngo.verified = true);
 
-    return data; // ⬅ return instead of rendering
-  } catch (err) {
-    console.error("Error loading static NGOs:", err);
-    return [];
-  }
-}
+//     return data; // ⬅ return instead of rendering
+//   } catch (err) {
+//     console.error("Error loading static NGOs:", err);
+//     return [];
+//   }
+// }
+
+// let approvedNGOs = []; // keep global list
+// let staticNGOs = [];   // keep global list
+
+// function listenToApprovedNGOs() {
+//   db.collection("ngoRequests")
+//     .where("status", "==", "approved")
+//     .orderBy("createdAt", "desc")
+//     .onSnapshot(snapshot => {
+//       approvedNGOs = [];
+//       snapshot.forEach(doc => {
+//         let ngo = doc.data();
+//         ngo.id = doc.id;
+//         ngo.verified = true;
+//         approvedNGOs.push(ngo);
+//       });
+
+//       // ✅ Merge both lists
+//       renderNGOCards([...approvedNGOs, ...staticNGOs]);
+//     });
+// }
+
 
 function listenToApprovedNGOs() {
   db.collection("ngoRequests")
     .where("status", "==", "approved")
     .orderBy("createdAt", "desc")
-    .onSnapshot(async snapshot => {
+    .onSnapshot(async (snapshot) => {
       let approvedNGOs = [];
       snapshot.forEach(doc => {
         let ngo = doc.data();
@@ -137,14 +156,31 @@ function listenToApprovedNGOs() {
         approvedNGOs.push(ngo);
       });
 
-      // Load static NGOs
-      const staticNGOs = await loadStaticNGOs();
+      //  Static NGOs bhi fetch karo
+      let staticNGOs = await loadStaticNGOs();
 
-      // Merge → approved first, then static
+      //  Merge both
       const allNGOs = [...approvedNGOs, ...staticNGOs];
 
+      // 
       renderNGOCards(allNGOs);
     });
+}
+
+
+async function loadStaticNGOs() {
+  try {
+    const res = await fetch("ngos_real_data.json");
+    staticNGOs = await res.json();
+
+    // mark them verified = true
+    staticNGOs.forEach(ngo => ngo.verified = true);
+
+    // ✅ Merge with approved NGOs
+    renderNGOCards([...approvedNGOs, ...staticNGOs]);
+  } catch (err) {
+    console.error("Error loading static NGOs:", err);
+  }
 }
 
 
